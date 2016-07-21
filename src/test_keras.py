@@ -13,6 +13,18 @@ class TestText(TestCase):
         nums = text_preprocessing.words_to_numbers(words_list)
         self.assertEqual([0, 1, 2, 0], nums)
 
+    def test_one_hot(self):
+        numbers = [3,1, 2, 0]
+        X = text_preprocessing.one_hot_encode(numbers)
+        self.assertEqual((4,4), X.shape)
+        self.assertEqual(X[0,3], 1)
+        self.assertEqual(sum(X[0,:2]),0)
+
+    def test_one_hot_decode(self):
+        numbers = [3,1, 2, 0]
+        X = text_preprocessing.one_hot_encode(numbers)
+        decode = text_preprocessing.one_hot_decode(X)
+        self.assertEqual(decode, numbers)
 
 class TestKeras(TestCase):
     def test_model_compiles(self):

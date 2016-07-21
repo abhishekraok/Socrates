@@ -22,6 +22,15 @@ def words_to_numbers(word_list):
     vocab = sorted(list(set(word_list)))
     return [vocab.index(i) for i in word_list]
 
+def one_hot_encode(number_list):
+    max_value = max(number_list)
+    x = np.zeros([len(number_list), max_value + 1])
+    for row,number in enumerate(number_list):
+        x[row, number] = 1
+    return x
+
+def one_hot_decode(X):
+    return list(np.argmax(X, axis=1))
 
 if __name__ == '__main__':
     string = get_clean_words_from_file('../data/pride.txt', 500)
