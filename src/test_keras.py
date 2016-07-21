@@ -10,21 +10,34 @@ from src import text_preprocessing
 class TestText(TestCase):
     def test_words_to_nums(self):
         words_list = ['aha', 'bat', 'cat', 'aha']
-        nums = text_preprocessing.words_to_numbers(words_list)
+        nums, vocab = text_preprocessing.words_to_numbers(words_list)
         self.assertEqual([0, 1, 2, 0], nums)
 
+    def test_nums_to_words(self):
+        words_list = ['aha', 'bat', 'cat', 'aha']
+        nums, vocab = text_preprocessing.words_to_numbers(words_list)
+        decoded_words = text_preprocessing.numbers_to_words(nums, vocab)
+        self.assertEqual(decoded_words, words_list)
+
+    def test_encode_decode_words_to_one_hot(self):
+        words_list = ['aha', 'bat', 'cat', 'aha']
+        one_hot, vocab = text_preprocessing.word_list_to_one_hot(words_list)
+        decode = text_preprocessing.one_hot_to_word_list(one_hot, vocab)
+        self.assertEqual(decode, words_list)
+
     def test_one_hot(self):
-        numbers = [3,1, 2, 0]
-        X = text_preprocessing.one_hot_encode(numbers)
-        self.assertEqual((4,4), X.shape)
-        self.assertEqual(X[0,3], 1)
-        self.assertEqual(sum(X[0,:2]),0)
+        numbers = [3, 1, 2, 0]
+        X = text_preprocessing.numbers_to_one_hot(numbers)
+        self.assertEqual((4, 4), X.shape)
+        self.assertEqual(X[0, 3], 1)
+        self.assertEqual(sum(X[0, :2]), 0)
 
     def test_one_hot_decode(self):
-        numbers = [3,1, 2, 0]
-        X = text_preprocessing.one_hot_encode(numbers)
-        decode = text_preprocessing.one_hot_decode(X)
+        numbers = [3, 1, 2, 0]
+        X = text_preprocessing.numbers_to_one_hot(numbers)
+        decode = text_preprocessing.one_hot_to_numbers(X)
         self.assertEqual(decode, numbers)
+
 
 class TestKeras(TestCase):
     def test_model_compiles(self):
