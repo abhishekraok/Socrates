@@ -90,3 +90,6 @@ ENV/
 
 # pickled files
 *.p
+
+# pycharm stuff
+.idea/
