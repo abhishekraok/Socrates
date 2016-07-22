@@ -18,19 +18,6 @@ def clean_text(text, max_input_length=10 ** 10000):
     return text
 
 
-def words_to_numbers(word_list):
-    vocab_list = sorted(list(set(word_list)))
-    words_to_numbers_dictionary = dict(((j,i) for i,j in enumerate(vocab_list)))
-    numbers_to_words_dictionary = dict(((i,j) for i,j in enumerate(vocab_list)))
-    return [words_to_numbers_dictionary[i] for i in word_list], numbers_to_words_dictionary
-
-
-def numbers_to_words(numbers, num2word_dict):
-    if max(numbers) > len(num2word_dict):
-        raise Exception
-    return [num2word_dict[i] for i in numbers]
-
-
 def numbers_to_one_hot(number_list):
     max_value = max(number_list)
     x = np.zeros([len(number_list), max_value + 1])
