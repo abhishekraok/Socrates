@@ -62,7 +62,7 @@ class TestKeras(TestCase):
         # generate dummy data
         # train the model, iterating on the data in batches
         # of 32 samples
-        model.fit(data, labels, nb_epoch=10, batch_size=32)
+        model.fit(data, labels, nb_epoch=1, batch_size=32)
         predicted = model.predict(data)
         f1 = f1_score(labels, predicted)
         self.assertGreater(f1, 0.7)
