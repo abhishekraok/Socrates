@@ -1,4 +1,6 @@
 class WordMap():
+    Unknown = 'UNK'
+
     def __init__(self, dictionary_file_name=None, words_list=None):
         if dictionary_file_name is None and words_list is None:
             raise Exception("Need something to start dictionary")
@@ -14,11 +16,15 @@ class WordMap():
         return [self.numbers_to_words_dictionary[i] for i in numbers]
 
     def words_to_numbers(self, word_list):
-        return [self.words_to_numbers_dictionary[i] for i in word_list]
+        return [self.words_to_numbers_dictionary.get(i, 0) for i in word_list]
+
+    def save_dictionary(self, file_name):
+        with open(file_name, 'w') as f:
+            f.write('\n'.join((str(i) + '\t' + str(j) for i, j in self.numbers_to_words_dictionary.iteritems())))
 
     @staticmethod
     def create_dictionary(word_list):
-        vocab_list = sorted(list(set(word_list)))
+        vocab_list = [WordMap.Unknown] + sorted(list(set(word_list)))
         numbers_to_words_dictionary = dict(((i, j) for i, j in enumerate(vocab_list)))
         words_to_numbers_dictionary = dict(((j, i) for i, j in enumerate(vocab_list)))
         return numbers_to_words_dictionary, words_to_numbers_dictionary
@@ -28,5 +34,16 @@ class WordMap():
         result = {}
         with open(dictionary_file_name, 'r') as f:
             all_text = f.read()
-            [result[i] =
-            for i in all_text]
+            return dict(((int(i.split('\t')[0]), i.split('\t')[1]) for i in all_text.split('\n')))
+
+
+if __name__ == '__main__':
+    word_list = ['hi', 'how', 'are', 'you']
+    message = ['how', 'are', 'are', 'hi']
+    wm = WordMap(words_list=word_list)
+    numbers = wm.words_to_numbers(word_list)
+    save_file_name = 'test.tsv'
+    wm.save_dictionary(save_file_name)
+    wm2 = WordMap(dictionary_file_name=save_file_name)
+    decoded_message = wm2.numbers_to_words(numbers)
+    print decoded_message

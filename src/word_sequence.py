@@ -1,4 +1,4 @@
-import text_preprocessing
+import TextPreprocessor
 from seq2seq.models import SimpleSeq2seq
 from keras.models import Sequential
 from keras.layers import Dense, Activation
@@ -7,8 +7,8 @@ import cPickle
 
 
 def process_data_for_file(filename):
-    string = text_preprocessing.get_clean_words_from_file(filename, 10**6)
-    X, vocab = text_preprocessing.word_list_to_one_hot(string)
+    string = TextPreprocessor.get_clean_words_from_file(filename, 10 ** 6)
+    X, vocab = TextPreprocessor.word_list_to_one_hot(string)
     print 'The vocabulary size is ', len(vocab)
     print X.shape
     y = X[1:]
@@ -31,5 +31,5 @@ if __name__ == '__main__':
     model.fit(X,y, nb_epoch=1, batch_size=32)
     cPickle.dump(model, open(model_file_name, 'wb'))
     yp = model.predict(X[:100,:])
-    words_predicted = text_preprocessing.one_hot_to_word_list(yp, vocab)
+    words_predicted = TextPreprocessor.one_hot_to_word_list(yp, vocab)
     print words_predicted
