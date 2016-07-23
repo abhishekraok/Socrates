@@ -39,6 +39,10 @@ class TextPreProcessor:
     def one_hot_to_numbers(X):
         return list(np.argmax(X, axis=1))
 
+    def vector_to_text(self, vector):
+        word_list = self.vector_to_words(vectors=vector)
+        return ' '.join(word_list)
+
 
 def get_clean_words_from_file(file, max_input_length):
     with open(file) as opened_file:

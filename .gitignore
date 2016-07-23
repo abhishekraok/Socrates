@@ -93,3 +93,6 @@ ENV/
 
 # pycharm stuff
 .idea/
+
+# custom dictionary files
+*.tsv

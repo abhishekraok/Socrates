@@ -9,7 +9,7 @@ from TextPreprocessor import TextPreProcessor
 
 
 class TestTextPreprocessor(TestCase):
-    def test_text_preprocess(self):
+    def test_text_preprocess_with_UNK(self):
         word_list = ['there', 'here', 'are', 'you', 'hi']
         wm = WordMap(words_list=word_list)
         save_file_name = 'test.tsv'
@@ -18,6 +18,17 @@ class TestTextPreprocessor(TestCase):
         vector = tp.text_to_vector('here are are hi woohoo')
         decoded_message = tp.vector_to_words(vector)
         self.assertEqual(decoded_message, ['here', 'are', 'are', 'hi', TextPreProcessor.Unknown])
+
+    def test_text_encod_decode(self):
+        word_list = ['there', 'here', 'are', 'you', 'hi']
+        wm = WordMap(words_list=word_list)
+        save_file_name = 'test.tsv'
+        wm.save_dictionary(save_file_name)
+        tp = TextPreProcessor(save_file_name)
+        test_message = 'here are are hi you'
+        vector = tp.text_to_vector(test_message)
+        decoded_message = tp.vector_to_text(vector)
+        self.assertEqual(decoded_message,  test_message)
 
     def test_one_hot(self):
         numbers = [3, 1, 2, 0]

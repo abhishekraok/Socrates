@@ -12,13 +12,9 @@ class TextPredictor():
         else:
             raise Exception("model file not found " + model_file_name)
         self.model = model
-        self.word_map = WordMap(dictionary_file_name=word_map_file)
+        self.text_processor = TextPreprocessor.TextPreProcessor(word_map_file)
 
     def get_reply(self, user_text):
-        user_word_list = TextPreprocessor.clean_text(user_text)
-        numbers = self.word_map.words_to_numbers(user_word_list)
-        x_in = TextPreprocessor.numbers_to_one_hot(numbers)
+        x_in = self.text_processor.text_to_vector(text=user_text)
         reply_vector = self.model.predict(x_in)
-        reply_numbers = TextPreprocessor.one_hot_to_numbers(reply_vector)
-        reply_words = self.word_map.numbers_to_words(reply_numbers)
-        return ' '.join(reply_words)
+        return self.text_processor.vector_to_text(reply_vector)
