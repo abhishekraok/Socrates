@@ -5,7 +5,7 @@ from keras.models import Sequential
 from numpy import linalg as LA
 from sklearn.metrics import f1_score
 from WordMap import WordMap
-from TextPreprocessor import TextPreProcessor
+from TextPreProcessor import TextPreProcessor
 
 
 class TestTextPreprocessor(TestCase):
@@ -104,9 +104,7 @@ class TestKeras(TestCase):
         labels = [1 if i > 0.6 else 0 for i in data_norm]
         model = Sequential()
         model.add(Dense(1, input_dim=input_dimension, activation='softmax'))
-        model.compile(optimizer='rmsprop',
-                      loss='binary_crossentropy',
-                      metrics=['accuracy'])
+        model.compile(optimizer='rmsprop', loss='binary_crossentropy')
         # generate dummy data
         # train the model, iterating on the data in batches
         # of 32 samples
