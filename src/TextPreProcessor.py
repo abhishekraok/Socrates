@@ -6,10 +6,22 @@ from WordMap import WordMap
 class TextPreProcessor:
     Unknown = 'UNK'
 
-    def __init__(self, dictionary_file):
-        self.word_map = WordMap(dictionary_file_name=dictionary_file)
+    def __init__(self, dictionary_file=None, word_map=None):
+        if not dictionary_file and not word_map:
+            raise
+        if word_map:
+            self.word_map = word_map
+        else:
+            self.word_map = WordMap(dictionary_file_name=dictionary_file)
         self.word_map.Unknown = TextPreProcessor.Unknown
-        pass
+
+    @staticmethod
+    def create_from_text_file(text_file_name):
+        words_list = get_clean_words_from_file(text_file_name, 10 ** 1000)
+        word_map = WordMap(words_list=words_list)
+        dictionary_txt = 'created_dictionary.txt'
+        word_map.save_dictionary(dictionary_txt)
+        return TextPreProcessor(word_map)
 
     def text_to_vector(self, text):
         word_list = nltk.word_tokenize(text)
