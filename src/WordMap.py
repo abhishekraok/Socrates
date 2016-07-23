@@ -20,7 +20,7 @@ class WordMap():
 
     def save_dictionary(self, file_name):
         with open(file_name, 'w') as f:
-            f.write('\n'.join((str(i) + '\t' + str(j) for i, j in self.numbers_to_words_dictionary.iteritems())))
+            f.write('\n'.join(self.numbers_to_words_dictionary.values()))
 
     @staticmethod
     def create_dictionary(word_list):
@@ -34,15 +34,15 @@ class WordMap():
         result = {}
         with open(dictionary_file_name, 'r') as f:
             all_text = f.read()
-            return dict(((int(i.split('\t')[0]), i.split('\t')[1]) for i in all_text.split('\n')))
+            return dict((((i,j) for i,j in enumerate(all_text.split('\n')))))
 
 
 if __name__ == '__main__':
     word_list = ['hi', 'how', 'are', 'you']
     message = ['how', 'are', 'are', 'hi']
     wm = WordMap(words_list=word_list)
-    numbers = wm.words_to_numbers(word_list)
-    save_file_name = 'test.tsv'
+    numbers = wm.words_to_numbers(message)
+    save_file_name = 'test.txt'
     wm.save_dictionary(save_file_name)
     wm2 = WordMap(dictionary_file_name=save_file_name)
     decoded_message = wm2.numbers_to_words(numbers)

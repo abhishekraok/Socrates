@@ -1,6 +1,6 @@
 from src.Actions import Actions
 from src.ChatHistory import ChatHistoryKeeper
-from src.TextPredictor import TextPredictor
+from src.TextPredictor import TextPredictor, DummyTextPredictor
 from src.Understander import Understander
 
 
@@ -11,12 +11,9 @@ class ChatEngine():
         if model_file_name and dictionary_file_name:
             self.text_predictor = TextPredictor('model.sequential.p', 'dict1.tsv')
         else:
-            self.text_predictor = None
+            self.text_predictor = DummyTextPredictor(None, None)
         self.query_understander = Understander()
         self.chat_history = ChatHistoryKeeper()
-
-    def train(self, text_file):
-        words = Text
 
     def chat(self, user_text):
         self.count -= 1
@@ -24,7 +21,7 @@ class ChatEngine():
             self.finished = True
         reply = self.query_to_actions(user_text)
         self.chat_history.append(user_text)
-        return user_text
+        return reply
 
     def query_to_actions(self, query):
         reply = ''
@@ -33,3 +30,8 @@ class ChatEngine():
             if action_i is Actions.predict:
                 reply = self.text_predictor.get_reply(query)
         return reply
+
+
+if __name__ == '__main__':
+    ce = ChatEngine(None, None)
+    print ce.chat('hello')
