@@ -6,8 +6,6 @@ from src.TPModel import TpModel
 
 
 class TextPredictor:
-    MaxVocabulary = 1000
-    PreviousWords = 20
 
     def __init__(self, model_file_name, word_map_file):
         if os.path.isfile(model_file_name):

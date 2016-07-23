@@ -21,7 +21,7 @@ class TextPreProcessor:
         word_map = WordMap(words_list=words_list)
         dictionary_txt = 'created_dictionary.txt'
         word_map.save_dictionary(dictionary_txt)
-        return TextPreProcessor(word_map)
+        return TextPreProcessor(word_map=word_map)
 
     def text_to_vector(self, text):
         word_list = nltk.word_tokenize(text)
@@ -59,7 +59,8 @@ class TextPreProcessor:
 def get_clean_words_from_file(file, max_input_length):
     with open(file) as opened_file:
         text = opened_file.read()[:max_input_length]
-        return nltk.word_tokenize(clean_text(text))
+        s = clean_text(text)
+        return nltk.word_tokenize(s)
 
 
 def clean_text(text, max_input_length=10 ** 10000):

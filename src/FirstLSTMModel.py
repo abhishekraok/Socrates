@@ -1,15 +1,14 @@
 from keras.layers import LSTM, Dense, Activation
 from keras.models import Sequential
 from keras.optimizers import RMSprop
-
-from src.TextPredictor import TextPredictor
-
+import cPickle
+from src.Constants import Constants
 
 class FirstLSTMModel(object):
     def __init__(self):
         self.model = Sequential()
-        self.model.add(LSTM(128, input_shape=(TextPredictor.PreviousWords, TextPredictor.MaxVocabulary)))
-        self.model.add(Dense(TextPredictor.MaxVocabulary))
+        self.model.add(LSTM(128, input_shape=(Constants.PreviousWords,Constants.MaxVocabulary)))
+        self.model.add(Dense(Constants.MaxVocabulary))
         self.model.add(Activation('softmax'))
         optimizer = RMSprop(lr=0.01)
         self.model.compile(loss='categorical_crossentropy', optimizer=optimizer)
@@ -21,4 +20,7 @@ class FirstLSTMModel(object):
         self.model.fit(x, y)
 
     def evaluate(self, x, y):
-        return self.model.evaluate(x,y)
+        return self.model.evaluate(x, y)
+
+    def save(self, file_name):
+        cPickle.dumps(self.model)
