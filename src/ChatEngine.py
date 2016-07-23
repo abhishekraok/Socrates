@@ -5,12 +5,18 @@ from src.Understander import Understander
 
 
 class ChatEngine():
-    def __init__(self):
+    def __init__(self, model_file_name, dictionary_file_name):
         self.finished = False
         self.count = 3
-        self.text_predictor = TextPredictor('model.sequential.p', 'dict1.tsv')
+        if model_file_name and dictionary_file_name:
+            self.text_predictor = TextPredictor('model.sequential.p', 'dict1.tsv')
+        else:
+            self.text_predictor = None
         self.query_understander = Understander()
         self.chat_history = ChatHistoryKeeper()
+
+    def train(self, text_file):
+        words = Text
 
     def chat(self, user_text):
         self.count -= 1
