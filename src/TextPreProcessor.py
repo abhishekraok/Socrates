@@ -48,7 +48,7 @@ class TextPreProcessor:
         x = np.zeros([len(number_list), Constants.MaxVocabulary])
         for row, number in enumerate(number_list):
             x[row, number] = 1
-        return x
+        return x.reshape((len(number_list), 1, Constants.MaxVocabulary))
 
     @staticmethod
     def one_hot_to_numbers(X):
