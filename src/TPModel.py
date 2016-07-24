@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import TextPreProcessor
 import FirstLSTMModel
+from Constants import Constants
 
 
 class TpModel():
@@ -22,7 +23,7 @@ class TpModel():
         text = TextPreProcessor.get_clean_words_from_file(text_file_name, 10 ** 7)
         if self.text_processor is None:
             self.text_processor = TextPreProcessor.TextPreProcessor.create_from_text_file(text_file_name=text_file_name)
-        x, y = self.text_processor.word_list_to_tensor(text)
+        x, y = self.text_processor.word_list_to_tensor(text, Constants.PreviousWords)
         print('Shape of X ', x.shape, ' shape of y ', y.shape)
         self.model.train(x, y)
         print('Training done')

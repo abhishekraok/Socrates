@@ -4,7 +4,7 @@ from __future__ import print_function
 import nltk
 import numpy as np
 from WordMap import WordMap
-import Constants
+from Constants import Constants
 
 
 class TextPreProcessor:
@@ -92,8 +92,3 @@ def clean_text(text, max_input_length=10 ** 10000):
     text = ''.join(e for e in text if e.isalnum() or e in '.?", ')
     return text
 
-# if __name__ == '__main__':
-#     string = get_clean_words_from_file('../data/pride.txt', 500)
-#     print string
-#     vecs, vocab = word_list_to_one_hot(string)
-#     print vecs
