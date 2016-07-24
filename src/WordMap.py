@@ -1,3 +1,7 @@
+from __future__ import print_function
+from six import iteritems
+
+
 class WordMap():
     Unknown = 'UNK'
 
@@ -8,7 +12,7 @@ class WordMap():
             self.numbers_to_words_dictionary, self.words_to_numbers_dictionary = WordMap.create_dictionary(words_list)
         else:
             self.numbers_to_words_dictionary = self.load_dictionary(dictionary_file_name)
-            self.words_to_numbers_dictionary = dict(((j, i) for i, j in self.numbers_to_words_dictionary.iteritems()))
+            self.words_to_numbers_dictionary = dict(((j, i) for i, j in iteritems(self.numbers_to_words_dictionary)))
 
     def numbers_to_words(self, numbers):
         if max(numbers) > len(self.numbers_to_words_dictionary):
@@ -31,7 +35,6 @@ class WordMap():
 
     @staticmethod
     def load_dictionary(dictionary_file_name):
-        result = {}
         with open(dictionary_file_name, 'r') as f:
             all_text = f.read()
             return dict((((i,j) for i,j in enumerate(all_text.split('\n')))))
@@ -46,4 +49,4 @@ if __name__ == '__main__':
     wm.save_dictionary(save_file_name)
     wm2 = WordMap(dictionary_file_name=save_file_name)
     decoded_message = wm2.numbers_to_words(numbers)
-    print decoded_message
+    print(decoded_message)

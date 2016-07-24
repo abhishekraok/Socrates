@@ -6,6 +6,7 @@ from numpy import linalg as LA
 from sklearn.metrics import f1_score
 from WordMap import WordMap
 from TextPreProcessor import TextPreProcessor
+from Constants import Constants
 
 
 class TestTextPreprocessor(TestCase):
@@ -15,9 +16,9 @@ class TestTextPreprocessor(TestCase):
         save_file_name = 'test.tsv'
         wm.save_dictionary(save_file_name)
         tp = TextPreProcessor(save_file_name)
-        vector = tp.text_to_vector('here are are hi woohoo')
+        vector,y = tp.text_to_vector('here are are hi woohoo', 1)
         decoded_message = tp.vector_to_words(vector)
-        self.assertEqual(decoded_message, ['here', 'are', 'are', 'hi', TextPreProcessor.Unknown])
+        self.assertEqual(decoded_message, ['here', 'are', 'are', 'hi'])
 
     def test_text_encod_decode(self):
         word_list = ['there', 'here', 'are', 'you', 'hi']
@@ -26,22 +27,22 @@ class TestTextPreprocessor(TestCase):
         wm.save_dictionary(save_file_name)
         tp = TextPreProcessor(save_file_name)
         test_message = 'here are are hi you'
-        vector = tp.text_to_vector(test_message)
+        vector,y = tp.text_to_vector(test_message, 1)
         decoded_message = tp.vector_to_text(vector)
-        self.assertEqual(decoded_message,  test_message)
+        self.assertEqual(decoded_message,  'here are are hi')
 
     def test_one_hot(self):
         numbers = [3, 1, 2, 0]
-        X = TextPreProcessor.numbers_to_tensor(numbers)
-        self.assertEqual((4, 4), X.shape)
-        self.assertEqual(X[0, 3], 1)
-        self.assertEqual(sum(X[0, :2]), 0)
+        X,y = TextPreProcessor.numbers_to_tensor(numbers, 1)
+        self.assertEqual((3,1, Constants.MaxVocabulary), X.shape)
+        self.assertEqual(X[0, 0, 3], 1)
+        self.assertEqual(sum(X[0, 0, :2]), 0)
 
     def test_one_hot_decode(self):
         numbers = [3, 1, 2, 0]
-        X = TextPreProcessor.numbers_to_tensor(numbers)
+        X,y = TextPreProcessor.numbers_to_tensor(numbers, 1)
         decode = TextPreProcessor.one_hot_to_numbers(X)
-        self.assertEqual(decode, numbers)
+        self.assertEqual(decode, numbers[:-1])
 
     def test_encode_decode_words_to_one_hot(self):
         word_list = ['aha', 'bat', 'cat']
@@ -50,9 +51,9 @@ class TestTextPreprocessor(TestCase):
         wm.save_dictionary(save_file_name)
         words_list = ['aha', 'bat', 'cat', 'aha']
         tp = TextPreProcessor(save_file_name)
-        one_hot = tp.word_list_to_tensor(words_list)
+        one_hot,y = tp.word_list_to_tensor(words_list, 1)
         decode = tp.one_hot_to_word_list(one_hot)
-        self.assertEqual(decode, words_list)
+        self.assertEqual(decode, words_list[:-1])
 
 
 class TestWordMap(TestCase):

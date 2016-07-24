@@ -1,3 +1,4 @@
+from __future__ import print_function
 import cPickle
 import os
 
@@ -33,4 +34,4 @@ class DummyTextPredictor(TextPredictor):
 
 if __name__ == '__main__':
     tp = TextPredictor(model_file_name='lstm_try.p', word_map_file=None)
-    print tp.train_words('../data/pride.txt')
+    print(tp.model.train_words('../data/pride.txt'))

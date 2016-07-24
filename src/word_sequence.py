@@ -1,3 +1,7 @@
+from __future__ import print_function
+from __future__ import print_function
+from __future__ import print_function
+from __future__ import print_function
 import TextPreprocessor
 from seq2seq.models import SimpleSeq2seq
 from keras.models import Sequential
@@ -9,11 +13,11 @@ import cPickle
 def process_data_for_file(filename):
     string = TextPreprocessor.get_clean_words_from_file(filename, 10 ** 6)
     X, vocab = TextPreprocessor.word_list_to_tensor(string)
-    print 'The vocabulary size is ', len(vocab)
-    print X.shape
+    print('The vocabulary size is ', len(vocab))
+    print(X.shape)
     y = X[1:]
     X = X[:-1]
-    print 'Does shape of X = shape of y? Ans:', X.shape == y.shape
+    print('Does shape of X = shape of y? Ans:', X.shape == y.shape)
     return X, y, vocab
 
 if __name__ == '__main__':
@@ -32,4 +36,4 @@ if __name__ == '__main__':
     cPickle.dump(model, open(model_file_name, 'wb'))
     yp = model.predict(X[:100,:])
     words_predicted = TextPreprocessor.one_hot_to_word_list(yp, vocab)
-    print words_predicted
+    print(words_predicted)

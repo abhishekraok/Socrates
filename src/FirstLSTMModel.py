@@ -1,7 +1,8 @@
+from __future__ import print_function
 from keras.layers import LSTM, Dense, Activation
 from keras.models import Sequential
 from keras.optimizers import RMSprop
-import cPickle
+import pickle
 from src.Constants import Constants
 import numpy as np
 
@@ -24,14 +25,14 @@ class FirstLSTMModel(object):
         return self.model.evaluate(x, y)
 
     def save(self, file_name):
-        cPickle.dumps(self.model)
+        pickle.dumps(self.model)
 
 if __name__ == '__main__':
     model = FirstLSTMModel()
     x = np.random.random((100, 1,Constants.MaxVocabulary))
     y = np.random.random((100,Constants.MaxVocabulary))
     model.train(x,y)
-    print model.evaluate(x,y)
+    print(model.evaluate(x, y))
 
 
 

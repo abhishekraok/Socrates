@@ -1,3 +1,6 @@
+from __future__ import print_function
+from __future__ import print_function
+from __future__ import print_function
 import nltk
 import numpy as np
 from WordMap import WordMap
@@ -9,7 +12,7 @@ class TextPreProcessor:
 
     def __init__(self, dictionary_file=None, word_map=None):
         if not dictionary_file and not word_map:
-            raise
+            raise Exception('You must supply either dictionary file or word map')
         if word_map:
             self.word_map = word_map
         else:
@@ -24,19 +27,19 @@ class TextPreProcessor:
         word_map.save_dictionary(dictionary_txt)
         return TextPreProcessor(word_map=word_map)
 
-    def text_to_vector(self, text):
+    def text_to_vector(self, text, history_length):
         word_list = nltk.word_tokenize(text)
-        return self.word_list_to_tensor(word_list)
+        return self.word_list_to_tensor(word_list, history_length=history_length)
 
     def vector_to_words(self, vectors):
         return self.one_hot_to_word_list(vectors)
 
-    def word_list_to_tensor(self, words_list):
-        print 'Converting words to tensors'
-        print 'Input is of length ', len(words_list)
+    def word_list_to_tensor(self, words_list, history_length):
+        print('Converting words to tensors')
+        print('Input is of length ', len(words_list))
         numbers = self.word_map.words_to_numbers(words_list)
-        x, y = TextPreProcessor.numbers_to_tensor(numbers)
-        print 'Created tensors  of shape ', x.shape, y.shape
+        x, y = TextPreProcessor.numbers_to_tensor(numbers, history_length=history_length)
+        print('Created tensors  of shape ', x.shape, y.shape)
         return x,y
 
     def one_hot_to_word_list(self, one_hot_matrix):
@@ -44,20 +47,19 @@ class TextPreProcessor:
         return self.word_map.numbers_to_words(numbers)
 
     @staticmethod
-    def numbers_to_tensor(number_list):
+    def numbers_to_tensor(number_list, history_length):
         max_value = max(number_list)
         if max_value > Constants.MaxVocabulary:
             raise Exception("The max value is greater than max vocabulary constant " + str(max_value))
         print('Vectorization...')
-        maxlen = Constants.PreviousWords
         sentences = []
         next_word = []
-        for i in range(0, len(number_list) - maxlen, Constants.Step):
-            sentences.append(number_list[i: i + maxlen])
-            next_word.append(number_list[i + maxlen])
+        for i in range(0, len(number_list) - history_length, Constants.Step):
+            sentences.append(number_list[i: i + history_length])
+            next_word.append(number_list[i + history_length])
         print('nb sequences:', len(sentences))
 
-        X = np.zeros((len(sentences), maxlen, Constants.MaxVocabulary), dtype=np.bool)
+        X = np.zeros((len(sentences), history_length, Constants.MaxVocabulary), dtype=np.bool)
         y = np.zeros((len(sentences), Constants.MaxVocabulary), dtype=np.bool)
         for i, word_list in enumerate(sentences):
             for t, word in enumerate(word_list):
@@ -66,8 +68,8 @@ class TextPreProcessor:
         return X,y
 
     @staticmethod
-    def one_hot_to_numbers(X):
-        return list(np.argmax(X, axis=1))
+    def one_hot_to_numbers(y):
+        return list(np.argmax(y, axis=2).flatten())
 
     def vector_to_text(self, vector):
         word_list = self.vector_to_words(vectors=vector)

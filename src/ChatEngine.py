@@ -1,3 +1,4 @@
+from __future__ import print_function
 from src.Actions import Actions
 from src.ChatHistory import ChatHistoryKeeper
 from src.TextPredictor import TextPredictor, DummyTextPredictor
@@ -34,4 +35,4 @@ class ChatEngine():
 
 if __name__ == '__main__':
     ce = ChatEngine(None, None)
-    print ce.chat('hello')
+    print(ce.chat('hello'))
