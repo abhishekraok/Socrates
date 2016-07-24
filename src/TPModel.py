@@ -18,7 +18,7 @@ class TpModel():
     def __init__(self, model_type, text_preprocessor, history_length):
         self.history_length = history_length
         self.text_processor = text_preprocessor
-        self.model = ModelFactory.get_model(model_type, input_shape=(history_length, text_preprocessor.vocabulary_size))
+        self.model = ModelFactory.get_model(model_type, input_shape=(history_length, text_preprocessor.vocabulary_size), nb_classes=text_preprocessor.vocabulary_size)
 
     def predict(self, x_in):
         self.model.predict(x_in)
