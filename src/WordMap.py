@@ -13,6 +13,7 @@ class WordMap():
         else:
             self.numbers_to_words_dictionary = self.load_dictionary(dictionary_file_name)
             self.words_to_numbers_dictionary = dict(((j, i) for i, j in iteritems(self.numbers_to_words_dictionary)))
+        self.vocabulary_size = len(self.numbers_to_words_dictionary)
 
     def numbers_to_words(self, numbers):
         if max(numbers) > len(self.numbers_to_words_dictionary):

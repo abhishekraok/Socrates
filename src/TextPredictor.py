@@ -3,7 +3,8 @@ import pickle
 import os
 
 import TextPreProcessor
-from src.TPModel import TpModel
+from TPModel import TpModel
+from EnumsCollection import ModelType
 
 
 class TextPredictor:
@@ -12,7 +13,7 @@ class TextPredictor:
             self.model = pickle.load(open(model_file_name, 'rb'))
         else:
             # raise Exception("model file not found " + model_file_name)
-            self.model = TpModel()
+            self.model = TpModel(ModelType.FirstLSTMModel)
         if word_map_file is not None:
             self.text_processor = TextPreProcessor.TextPreProcessor(word_map_file)
 
@@ -33,5 +34,13 @@ class DummyTextPredictor(TextPredictor):
 
 
 if __name__ == '__main__':
-    tp = TextPredictor(model_file_name='lstm_try.p', word_map_file=None)
-    print(tp.model.train_on_text_file('../data/pride.txt'))
+    tp = TextPredictor(model_file_name=None, word_map_file='../data/MostCommon2266.txt')
+    for i in range(20):
+        print(tp.model.train_on_text_file('../data/pride.txt', history_length=10, epochs=1))
+        you = 'how are you'
+        print('You:', you)
+        print('Bot:', tp.get_reply(you))
+        today = 'how is the day today'
+        print('You:', today)
+        print('Bot:', tp.get_reply(today))
+

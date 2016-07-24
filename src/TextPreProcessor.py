@@ -15,6 +15,7 @@ class TextPreProcessor:
             self.word_map = word_map
         else:
             self.word_map = WordMap(dictionary_file_name=dictionary_file)
+        self.vocabulary_size = self.word_map.vocabulary_size
         self.word_map.Unknown = TextPreProcessor.Unknown
 
     @staticmethod
@@ -36,7 +37,7 @@ class TextPreProcessor:
         print('Converting words to tensors')
         print('Input is of length ', len(words_list))
         numbers = self.word_map.words_to_numbers(words_list)
-        x, y = TextPreProcessor.numbers_to_tensor(numbers, history_length=history_length)
+        x, y = self.numbers_to_tensor(numbers, history_length=history_length)
         print('Created tensors  of shape ', x.shape, y.shape)
         return x, y
 
@@ -44,11 +45,10 @@ class TextPreProcessor:
         numbers = TextPreProcessor.one_hot_to_numbers(one_hot_matrix)
         return self.word_map.numbers_to_words(numbers)
 
-    @staticmethod
-    def numbers_to_tensor(number_list, history_length):
+    def numbers_to_tensor(self, number_list, history_length):
         max_value = max(number_list)
-        if max_value > Constants.MaxVocabulary:
-            raise Exception("The max value is greater than max vocabulary constant " + str(max_value))
+        if max_value > self.vocabulary_size:
+            raise Exception("The max value is greater than vocabulary size" + str(max_value))
         print('Vectorization...')
         sentences = []
         next_word = []
@@ -57,8 +57,8 @@ class TextPreProcessor:
             next_word.append(number_list[i + history_length])
         print('nb sequences:', len(sentences))
 
-        X = np.zeros((len(sentences), history_length, Constants.MaxVocabulary), dtype=np.bool)
-        y = np.zeros((len(sentences), Constants.MaxVocabulary), dtype=np.bool)
+        X = np.zeros((len(sentences), history_length, self.vocabulary_size), dtype=np.bool)
+        y = np.zeros((len(sentences), self.vocabulary_size), dtype=np.bool)
         for i, word_list in enumerate(sentences):
             for t, word in enumerate(word_list):
                 X[i, t, word] = 1

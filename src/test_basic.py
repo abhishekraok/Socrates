@@ -1,14 +1,15 @@
 from unittest import TestCase
+
 import numpy as np
 from keras.layers import Dense, Activation
 from keras.models import Sequential
 from numpy import linalg as LA
 from sklearn.metrics import f1_score
-from WordMap import WordMap
-from TextPreProcessor import TextPreProcessor
-from Constants import Constants
-from TPModel import TpModel
+
 from EnumsCollection import ModelType
+from TPModel import TpModel
+from TextPreProcessor import TextPreProcessor
+from WordMap import WordMap
 
 
 class TestTPModel(TestCase):
@@ -19,7 +20,7 @@ class TestTPModel(TestCase):
             f.write('hello how are you')
         test_save = '../models/test_save'
         tp_model.save(test_save)
-        new_model =TpModel.load(test_save, ModelType.SimplestModel)
+        new_model = TpModel.load(test_save, ModelType.SimplestModel)
         self.assertEqual(new_model.model.get_weights(), tp_model.model.get_weights())
         tp_model.delete_model(test_save)
 
@@ -48,14 +49,20 @@ class TestTextPreprocessor(TestCase):
 
     def test_one_hot(self):
         numbers = [3, 1, 2, 0]
-        X, y = TextPreProcessor.numbers_to_tensor(numbers, 1)
-        self.assertEqual((3, 1, Constants.MaxVocabulary), X.shape)
+        word_list = ['aha', 'bat', 'cat']
+        wm = WordMap(words_list=word_list)
+        tp = TextPreProcessor(word_map=wm)
+        X, y = tp.numbers_to_tensor(numbers, 1)
+        self.assertEqual((3, 1, tp.vocabulary_size), X.shape)
         self.assertEqual(X[0, 0, 3], 1)
         self.assertEqual(sum(X[0, 0, :2]), 0)
 
     def test_one_hot_decode(self):
         numbers = [3, 1, 2, 0]
-        X, y = TextPreProcessor.numbers_to_tensor(numbers, 1)
+        word_list = ['aha', 'bat', 'cat']
+        wm = WordMap(words_list=word_list)
+        tp = TextPreProcessor(word_map=wm)
+        X, y = tp.numbers_to_tensor(numbers, 1)
         decode = TextPreProcessor.one_hot_to_numbers(X)
         self.assertEqual(decode, numbers[:-1])
 

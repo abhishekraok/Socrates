@@ -34,5 +34,5 @@ class ChatEngine():
 
 
 if __name__ == '__main__':
-    ce = ChatEngine(None, None)
+    ce = ChatEngine(None, '../data/MostCommon2266.txt')
     print(ce.chat('hello'))
