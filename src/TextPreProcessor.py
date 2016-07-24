@@ -26,29 +26,44 @@ class TextPreProcessor:
 
     def text_to_vector(self, text):
         word_list = nltk.word_tokenize(text)
-        return self.word_list_to_one_hot(word_list)
+        return self.word_list_to_tensor(word_list)
 
     def vector_to_words(self, vectors):
         return self.one_hot_to_word_list(vectors)
 
-    def word_list_to_one_hot(self, words_list):
-        print 'Converting words to one hot representation'
+    def word_list_to_tensor(self, words_list):
+        print 'Converting words to tensors'
+        print 'Input is of length ', len(words_list)
         numbers = self.word_map.words_to_numbers(words_list)
-        return TextPreProcessor.numbers_to_one_hot(numbers)
+        x, y = TextPreProcessor.numbers_to_tensor(numbers)
+        print 'Created tensors  of shape ', x.shape, y.shape
+        return x,y
 
     def one_hot_to_word_list(self, one_hot_matrix):
         numbers = TextPreProcessor.one_hot_to_numbers(one_hot_matrix)
         return self.word_map.numbers_to_words(numbers)
 
     @staticmethod
-    def numbers_to_one_hot(number_list):
+    def numbers_to_tensor(number_list):
         max_value = max(number_list)
         if max_value > Constants.MaxVocabulary:
             raise Exception("The max value is greater than max vocabulary constant " + str(max_value))
-        x = np.zeros([len(number_list), Constants.MaxVocabulary])
-        for row, number in enumerate(number_list):
-            x[row, number] = 1
-        return x.reshape((len(number_list), 1, Constants.MaxVocabulary))
+        print('Vectorization...')
+        maxlen = Constants.PreviousWords
+        sentences = []
+        next_word = []
+        for i in range(0, len(number_list) - maxlen, Constants.Step):
+            sentences.append(number_list[i: i + maxlen])
+            next_word.append(number_list[i + maxlen])
+        print('nb sequences:', len(sentences))
+
+        X = np.zeros((len(sentences), maxlen, Constants.MaxVocabulary), dtype=np.bool)
+        y = np.zeros((len(sentences), Constants.MaxVocabulary), dtype=np.bool)
+        for i, word_list in enumerate(sentences):
+            for t, word in enumerate(word_list):
+                X[i, t, word] = 1
+            y[i, next_word[i]] = 1
+        return X,y
 
     @staticmethod
     def one_hot_to_numbers(X):

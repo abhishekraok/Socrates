@@ -32,14 +32,14 @@ class TestTextPreprocessor(TestCase):
 
     def test_one_hot(self):
         numbers = [3, 1, 2, 0]
-        X = TextPreProcessor.numbers_to_one_hot(numbers)
+        X = TextPreProcessor.numbers_to_tensor(numbers)
         self.assertEqual((4, 4), X.shape)
         self.assertEqual(X[0, 3], 1)
         self.assertEqual(sum(X[0, :2]), 0)
 
     def test_one_hot_decode(self):
         numbers = [3, 1, 2, 0]
-        X = TextPreProcessor.numbers_to_one_hot(numbers)
+        X = TextPreProcessor.numbers_to_tensor(numbers)
         decode = TextPreProcessor.one_hot_to_numbers(X)
         self.assertEqual(decode, numbers)
 
@@ -50,7 +50,7 @@ class TestTextPreprocessor(TestCase):
         wm.save_dictionary(save_file_name)
         words_list = ['aha', 'bat', 'cat', 'aha']
         tp = TextPreProcessor(save_file_name)
-        one_hot = tp.word_list_to_one_hot(words_list)
+        one_hot = tp.word_list_to_tensor(words_list)
         decode = tp.one_hot_to_word_list(one_hot)
         self.assertEqual(decode, words_list)
 

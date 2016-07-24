@@ -8,7 +8,7 @@ import cPickle
 
 def process_data_for_file(filename):
     string = TextPreprocessor.get_clean_words_from_file(filename, 10 ** 6)
-    X, vocab = TextPreprocessor.word_list_to_one_hot(string)
+    X, vocab = TextPreprocessor.word_list_to_tensor(string)
     print 'The vocabulary size is ', len(vocab)
     print X.shape
     y = X[1:]

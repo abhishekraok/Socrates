@@ -18,7 +18,7 @@ class FirstLSTMModel(object):
         return self.model.predict(x_in)
 
     def train(self, x, y):
-        self.model.fit(x, y)
+        self.model.fit(x, y, nb_epoch=10, batch_size=32)
 
     def evaluate(self, x, y):
         return self.model.evaluate(x, y)
@@ -32,5 +32,6 @@ if __name__ == '__main__':
     y = np.random.random((100,Constants.MaxVocabulary))
     model.train(x,y)
     print model.evaluate(x,y)
+
 
 

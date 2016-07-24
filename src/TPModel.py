@@ -20,9 +20,7 @@ class TpModel():
         text = TextPreProcessor.get_clean_words_from_file(text_file_name, 10 ** 7)
         if self.text_processor is None:
             self.text_processor = TextPreProcessor.TextPreProcessor.create_from_text_file(text_file_name=text_file_name)
-        train_x = self.text_processor.word_list_to_one_hot(text)
-        y = train_x[1:]
-        x = train_x[:-1]
+        x, y = self.text_processor.word_list_to_tensor(text)
         print 'Shape of X ', x.shape, ' shape of y ', y.shape
         self.model.train(x, y)
         print 'Training done'
@@ -33,7 +31,7 @@ class TpModel():
 
 
 if __name__ == '__main__':
-    text_file = '../data/pride.txt'
+    text_file = '../data/small_pride.txt'
     tp = TpModel()
     print tp.train_words(text_file)
-    tp.save('lstm_pride.p')
+    tp.save('firstlstm_pride.p')
