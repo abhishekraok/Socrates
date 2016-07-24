@@ -4,8 +4,9 @@ from keras.models import model_from_json
 
 import TextPreProcessor
 from Constants import Constants
-from src.ModelFactory import ModelFactory
+from ModelFactory import ModelFactory
 import os
+from EnumsCollection import ModelType
 
 
 class TpModel():
@@ -28,7 +29,7 @@ class TpModel():
             self.text_processor = TextPreProcessor.TextPreProcessor.create_from_text_file(text_file_name=text_file_name)
         x, y = self.text_processor.word_list_to_tensor(text, history_length=history_length)
         print('Shape of X ', x.shape, ' shape of y ', y.shape)
-        self.model.train(x, y, epochs=epochs)
+        self.model.fit(x, y, nb_epoch=epochs)
         print('Training done')
         return self.model.evaluate(x, y)
 
@@ -43,7 +44,7 @@ class TpModel():
         json_string = self.model.to_json()
         json_file_name, h5_file_name = TpModel.get_full_file_names(file_name)
         open(json_file_name, 'w').write(json_string)
-        self.model.save_weights(h5_file_name)
+        self.model.save_weights(h5_file_name, overwrite=True)
 
     @staticmethod
     def load(file_name, model_type):
@@ -64,6 +65,7 @@ class TpModel():
 
 if __name__ == '__main__':
     text_file = '../data/pride.txt'
-    tp = TpModel()
-    print(tp.train_on_text_file(text_file, history_length=Constants.PreviousWords, epochs=50))
+    tp = TpModel(ModelType.FirstLSTMModel)
+    result = tp.train_on_text_file(text_file, history_length=Constants.PreviousWords, epochs=50)
+    print(result)
     tp.save('firstlstm_pride_50epoch')

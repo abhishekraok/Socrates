@@ -7,5 +7,5 @@ class Actions(Enum):
 
 
 class ModelType(Enum):
-    FirstLSTMModel = 1
-    SimplestModel = 2
+    FirstLSTMModel = 0
+    SimplestModel = 1

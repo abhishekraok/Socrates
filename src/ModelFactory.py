@@ -9,9 +9,9 @@ from src.Constants import Constants
 class ModelFactory(object):
     @staticmethod
     def get_model(model_type):
-        if model_type == ModelType.FirstLSTMModel:
+        if model_type.value == ModelType.FirstLSTMModel.value:
             return ModelFactory.get_first_lstm_model()
-        if model_type == ModelType.SimplestModel:
+        if model_type.value == ModelType.SimplestModel.value:
             return ModelFactory.get_simplest_model()
         raise Exception("Model type not understood " + str(model_type))
 
