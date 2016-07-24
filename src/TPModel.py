@@ -15,19 +15,18 @@ class TpModel():
     This is a general text prediction model and specific details are contained in self.model.
     """
 
-    def __init__(self, model_type):
-        self.model = ModelFactory.get_model(model_type)
-        self.text_processor = None
+    def __init__(self, model_type, text_preprocessor, history_length):
+        self.history_length = history_length
+        self.text_processor = text_preprocessor
+        self.model = ModelFactory.get_model(model_type, input_shape=(history_length, text_preprocessor.vocabulary_size))
 
     def predict(self, x_in):
         self.model.predict(x_in)
 
-    def train_on_text_file(self, text_file_name, history_length, epochs):
+    def train_on_text_file(self, text_file_name, epochs):
         print('Training on ', text_file_name)
         text = TextPreProcessor.get_clean_words_from_file(text_file_name, 10 ** 7)
-        if self.text_processor is None:
-            self.text_processor = TextPreProcessor.TextPreProcessor.create_from_text_file(text_file_name=text_file_name)
-        x, y = self.text_processor.word_list_to_tensor(text, history_length=history_length)
+        x, y = self.text_processor.word_list_to_tensor(text, history_length=self.history_length)
         print('Shape of X ', x.shape, ' shape of y ', y.shape)
         self.model.fit(x, y, nb_epoch=epochs)
         print('Training done')
@@ -47,11 +46,11 @@ class TpModel():
         self.model.save_weights(h5_file_name, overwrite=True)
 
     @staticmethod
-    def load(file_name, model_type):
+    def load(file_name, model_type, text_preprocessor, history_length):
         json_file_name, h5_file_name = TpModel.get_full_file_names(file_name)
         model = model_from_json(open(json_file_name, 'r').read())
         model.load_weights(h5_file_name)
-        tp_model = TpModel(model_type)
+        tp_model = TpModel(model_type, text_preprocessor, history_length=history_length)
         tp_model.model = model
         return tp_model
 
@@ -65,7 +64,8 @@ class TpModel():
 
 if __name__ == '__main__':
     text_file = '../data/pride.txt'
-    tp = TpModel(ModelType.FirstLSTMModel)
-    result = tp.train_on_text_file(text_file, history_length=Constants.PreviousWords, epochs=50)
+    tp = TextPreProcessor.TextPreProcessor.create_from_text_file(text_file_name=text_file)
+    tp = TpModel(ModelType.FirstLSTMModel, tp, history_length=Constants.PreviousWords)
+    result = tp.train_on_text_file(text_file, epochs=50)
     print(result)
     tp.save('firstlstm_pride_50epoch')

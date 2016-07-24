@@ -14,13 +14,14 @@ from WordMap import WordMap
 
 class TestTPModel(TestCase):
     def test_save_load_model(self):
-        tp_model = TpModel(model_type=ModelType.SimplestModel)
         test_text_file = 'test.txt'
         with open(test_text_file, 'w') as f:
             f.write('hello how are you')
+        tp = TextPreProcessor.create_from_text_file(test_text_file)
+        tp_model = TpModel(model_type=ModelType.SimplestModel, history_length=1, text_preprocessor=tp)
         test_save = '../models/test_save'
         tp_model.save(test_save)
-        new_model = TpModel.load(test_save, ModelType.SimplestModel)
+        new_model = TpModel.load(test_save, ModelType.SimplestModel, history_length=1, text_preprocessor=tp)
         self.assertEqual(new_model.model.get_weights(), tp_model.model.get_weights())
         tp_model.delete_model(test_save)
 

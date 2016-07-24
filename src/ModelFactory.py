@@ -8,17 +8,17 @@ from Constants import Constants
 
 class ModelFactory(object):
     @staticmethod
-    def get_model(model_type):
+    def get_model(model_type, input_shape):
         if model_type.value == ModelType.FirstLSTMModel.value:
-            return ModelFactory.get_first_lstm_model()
+            return ModelFactory.get_first_lstm_model(input_shape)
         if model_type.value == ModelType.SimplestModel.value:
             return ModelFactory.get_simplest_model()
         raise Exception("Model type not understood " + str(model_type))
 
     @staticmethod
-    def get_first_lstm_model():
+    def get_first_lstm_model(input_shape):
         model = Sequential()
-        model.add(LSTM(128, input_dim=Constants.MaxVocabulary))
+        model.add(LSTM(128, input_shape=input_shape))
         model.add(Dense(Constants.MaxVocabulary))
         model.add(Activation('softmax'))
         optimizer = RMSprop(lr=0.01)

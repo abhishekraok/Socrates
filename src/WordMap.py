@@ -21,7 +21,10 @@ class WordMap():
         return [self.numbers_to_words_dictionary[i] for i in numbers]
 
     def words_to_numbers(self, word_list):
-        return [self.words_to_numbers_dictionary.get(i, 0) for i in word_list]
+        numbers = [self.words_to_numbers_dictionary.get(i, 0) for i in word_list]
+        zero_ratio = float(sum((i is 0 for i in numbers)))/len(numbers)
+        print('The ratio of zeros (Unkown words) in the text is ', zero_ratio)
+        return numbers
 
     def save_dictionary(self, file_name):
         with open(file_name, 'w') as f:
