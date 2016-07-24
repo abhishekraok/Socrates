@@ -3,7 +3,7 @@ from keras.layers import LSTM, Dense, Activation
 from keras.models import Sequential
 from keras.optimizers import RMSprop
 import pickle
-from src.Constants import Constants
+from Constants import Constants
 import numpy as np
 
 class FirstLSTMModel(object):
