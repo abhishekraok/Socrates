@@ -1,7 +1,7 @@
 from __future__ import print_function
 
-from src import TextPreProcessor
-from src import FirstLSTMModel
+import TextPreProcessor
+import FirstLSTMModel
 
 
 class TpModel():

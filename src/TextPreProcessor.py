@@ -4,7 +4,7 @@ from __future__ import print_function
 import nltk
 import numpy as np
 from WordMap import WordMap
-from src.Constants import Constants
+import Constants
 
 
 class TextPreProcessor:
