@@ -28,8 +28,8 @@ class FirstLSTMModel(object):
 
 if __name__ == '__main__':
     model = FirstLSTMModel()
-    x = np.random.random((5, Constants.MaxVocabulary))
-    y = np.random.rand((Constants.MaxVocabulary))
+    x = np.random.random((100,5, Constants.MaxVocabulary))
+    y = np.random.random((100,Constants.MaxVocabulary))
     model.train(x,y)
     print model.evaluate(x,y)
 
