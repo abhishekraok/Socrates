@@ -88,11 +88,18 @@ ENV/
 # Rope project settings
 .ropeproject
 
-# pickled files
+# data files
+data/
 *.p
+*.json
+*.h5
 
 # pycharm stuff
 .idea/
+src/scratch/
 
 # custom dictionary files
 *.tsv
+
+# text file
+*.txt

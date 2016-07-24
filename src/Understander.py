@@ -1,4 +1,4 @@
-from src.Actions import Actions
+from src.EnumsCollection import Actions
 
 
 class Understander(object):

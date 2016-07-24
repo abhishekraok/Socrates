@@ -1,6 +1,4 @@
 from __future__ import print_function
-from __future__ import print_function
-from __future__ import print_function
 import nltk
 import numpy as np
 from WordMap import WordMap
@@ -40,7 +38,7 @@ class TextPreProcessor:
         numbers = self.word_map.words_to_numbers(words_list)
         x, y = TextPreProcessor.numbers_to_tensor(numbers, history_length=history_length)
         print('Created tensors  of shape ', x.shape, y.shape)
-        return x,y
+        return x, y
 
     def one_hot_to_word_list(self, one_hot_matrix):
         numbers = TextPreProcessor.one_hot_to_numbers(one_hot_matrix)
@@ -65,7 +63,7 @@ class TextPreProcessor:
             for t, word in enumerate(word_list):
                 X[i, t, word] = 1
             y[i, next_word[i]] = 1
-        return X,y
+        return X, y
 
     @staticmethod
     def one_hot_to_numbers(y):
@@ -86,9 +84,8 @@ def get_clean_words_from_file(file, max_input_length):
 def clean_text(text, max_input_length=10 ** 10000):
     text = text.replace('\n', ' ')
     max_length = min(max_input_length, len(text))
-    rotation = np.random.randint(low=0, high=max_length, size=1)
+    rotation = np.random.randint(low=0, high=max_length, size=1)[0]
     text = text[rotation:max_length] + text[:rotation]
     # make sure to remove # for category separation
     text = ''.join(e for e in text if e.isalnum() or e in '.?", ')
     return text
-

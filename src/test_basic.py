@@ -7,6 +7,21 @@ from sklearn.metrics import f1_score
 from WordMap import WordMap
 from TextPreProcessor import TextPreProcessor
 from Constants import Constants
+from TPModel import TpModel
+from EnumsCollection import ModelType
+
+
+class TestTPModel(TestCase):
+    def test_save_load_model(self):
+        tp_model = TpModel(model_type=ModelType.SimplestModel)
+        test_text_file = 'test.txt'
+        with open(test_text_file, 'w') as f:
+            f.write('hello how are you')
+        test_save = '../models/test_save'
+        tp_model.save(test_save)
+        new_model =TpModel.load(test_save, ModelType.SimplestModel)
+        self.assertEqual(new_model.model.get_weights(), tp_model.model.get_weights())
+        tp_model.delete_model(test_save)
 
 
 class TestTextPreprocessor(TestCase):
@@ -16,7 +31,7 @@ class TestTextPreprocessor(TestCase):
         save_file_name = 'test.tsv'
         wm.save_dictionary(save_file_name)
         tp = TextPreProcessor(save_file_name)
-        vector,y = tp.text_to_vector('here are are hi woohoo', 1)
+        vector, y = tp.text_to_vector('here are are hi woohoo', 1)
         decoded_message = tp.vector_to_words(vector)
         self.assertEqual(decoded_message, ['here', 'are', 'are', 'hi'])
 
@@ -27,20 +42,20 @@ class TestTextPreprocessor(TestCase):
         wm.save_dictionary(save_file_name)
         tp = TextPreProcessor(save_file_name)
         test_message = 'here are are hi you'
-        vector,y = tp.text_to_vector(test_message, 1)
+        vector, y = tp.text_to_vector(test_message, 1)
         decoded_message = tp.vector_to_text(vector)
-        self.assertEqual(decoded_message,  'here are are hi')
+        self.assertEqual(decoded_message, 'here are are hi')
 
     def test_one_hot(self):
         numbers = [3, 1, 2, 0]
-        X,y = TextPreProcessor.numbers_to_tensor(numbers, 1)
-        self.assertEqual((3,1, Constants.MaxVocabulary), X.shape)
+        X, y = TextPreProcessor.numbers_to_tensor(numbers, 1)
+        self.assertEqual((3, 1, Constants.MaxVocabulary), X.shape)
         self.assertEqual(X[0, 0, 3], 1)
         self.assertEqual(sum(X[0, 0, :2]), 0)
 
     def test_one_hot_decode(self):
         numbers = [3, 1, 2, 0]
-        X,y = TextPreProcessor.numbers_to_tensor(numbers, 1)
+        X, y = TextPreProcessor.numbers_to_tensor(numbers, 1)
         decode = TextPreProcessor.one_hot_to_numbers(X)
         self.assertEqual(decode, numbers[:-1])
 
@@ -51,7 +66,7 @@ class TestTextPreprocessor(TestCase):
         wm.save_dictionary(save_file_name)
         words_list = ['aha', 'bat', 'cat', 'aha']
         tp = TextPreProcessor(save_file_name)
-        one_hot,y = tp.word_list_to_tensor(words_list, 1)
+        one_hot, y = tp.word_list_to_tensor(words_list, 1)
         decode = tp.one_hot_to_word_list(one_hot)
         self.assertEqual(decode, words_list[:-1])
 

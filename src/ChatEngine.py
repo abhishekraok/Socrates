@@ -1,5 +1,5 @@
 from __future__ import print_function
-from src.Actions import Actions
+from src.EnumsCollection import Actions
 from src.ChatHistory import ChatHistoryKeeper
 from src.TextPredictor import TextPredictor, DummyTextPredictor
 from src.Understander import Understander

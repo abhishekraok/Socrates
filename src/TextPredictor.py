@@ -1,5 +1,5 @@
 from __future__ import print_function
-import cPickle
+import pickle
 import os
 
 import TextPreProcessor
@@ -9,7 +9,7 @@ from src.TPModel import TpModel
 class TextPredictor:
     def __init__(self, model_file_name, word_map_file):
         if os.path.isfile(model_file_name):
-            self.model = cPickle.load(open(model_file_name, 'rb'))
+            self.model = pickle.load(open(model_file_name, 'rb'))
         else:
             # raise Exception("model file not found " + model_file_name)
             self.model = TpModel()
@@ -29,9 +29,9 @@ class DummyTextPredictor(TextPredictor):
 
     def __init__(self, model_file_name, word_map_file):
         self.model = DummyTextPredictor.DummyModel()
-        self.text_processor = TextPreProcessor.TextPreProcessor(word_map_file)
+        self.text_processor = None
 
 
 if __name__ == '__main__':
     tp = TextPredictor(model_file_name='lstm_try.p', word_map_file=None)
-    print(tp.model.train_words('../data/pride.txt'))
+    print(tp.model.train_on_text_file('../data/pride.txt'))
