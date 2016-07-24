@@ -1,3 +1,3 @@
 class Constants:
-    MaxVocabulary = 1000
+    MaxVocabulary = 10000
     PreviousWords = 20

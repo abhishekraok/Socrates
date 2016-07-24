@@ -3,11 +3,12 @@ from keras.models import Sequential
 from keras.optimizers import RMSprop
 import cPickle
 from src.Constants import Constants
+import numpy as np
 
 class FirstLSTMModel(object):
     def __init__(self):
         self.model = Sequential()
-        self.model.add(LSTM(128, input_shape=(Constants.PreviousWords,Constants.MaxVocabulary)))
+        self.model.add(LSTM(128, input_shape=(5,Constants.MaxVocabulary)))
         self.model.add(Dense(Constants.MaxVocabulary))
         self.model.add(Activation('softmax'))
         optimizer = RMSprop(lr=0.01)
@@ -24,3 +25,12 @@ class FirstLSTMModel(object):
 
     def save(self, file_name):
         cPickle.dumps(self.model)
+
+if __name__ == '__main__':
+    model = FirstLSTMModel()
+    x = np.random.random((5, Constants.MaxVocabulary))
+    y = np.random.rand((Constants.MaxVocabulary))
+    model.train(x,y)
+    print model.evaluate(x,y)
+
+

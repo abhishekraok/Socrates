@@ -33,7 +33,7 @@ class TpModel():
 
 
 if __name__ == '__main__':
-    text_file = '../data/small_pride.txt'
+    text_file = '../data/pride.txt'
     tp = TpModel()
     print tp.train_words(text_file)
     tp.save('lstm_pride.p')

@@ -1,6 +1,7 @@
 import nltk
 import numpy as np
 from WordMap import WordMap
+from src.Constants import Constants
 
 
 class TextPreProcessor:
@@ -42,7 +43,9 @@ class TextPreProcessor:
     @staticmethod
     def numbers_to_one_hot(number_list):
         max_value = max(number_list)
-        x = np.zeros([len(number_list), max_value + 1])
+        if max_value > Constants.MaxVocabulary:
+            raise Exception("The max value is greater than max vocabulary constant " + str(max_value))
+        x = np.zeros([len(number_list), Constants.MaxVocabulary])
         for row, number in enumerate(number_list):
             x[row, number] = 1
         return x
