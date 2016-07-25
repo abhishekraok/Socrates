@@ -10,7 +10,7 @@ from EnumsCollection import ModelType
 from TPModel import TpModel
 from TextPreProcessor import TextPreProcessor
 from WordMap import WordMap
-
+from Word2Vec import Word2Vec
 
 class TestTPModel(TestCase):
     def test_save_load_model(self):
@@ -136,3 +136,13 @@ class TestKeras(TestCase):
         predicted = model.predict(data)
         f1 = f1_score(labels, predicted)
         self.assertGreater(f1, 0.7)
+
+class TestWord2Vec(self):
+    def test_word_vec(self):
+        word="Congratulations"
+        model=Word2Vec()
+        words=model.get_words(model.get_vector(word))
+        derived_word=words[0]
+        self.assertEqual(word,derived_word)
+        
+
