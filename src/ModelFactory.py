@@ -73,9 +73,17 @@ class ModelFactory(object):
         if not output_length:
             raise Exception('Output Length required for sequence model')
         word2vec_dimension = input_shape[1]
-        model = SimpleSeq2seq(input_dim=word2vec_dimension, hidden_dim=10000, output_length=output_length,
+        model = SimpleSeq2seq(input_dim=word2vec_dimension, hidden_dim=1000, output_length=output_length,
                               output_dim=nb_classes)
         model.compile(loss='cosine_proximity', optimizer='rmsprop')
         return model
-        pass
 
+    @staticmethod
+    def get_2layer_1k_model(input_shape, nb_classes, output_length):
+        if not output_length:
+            raise Exception('Output Length required for sequence model')
+        word2vec_dimension = input_shape[1]
+        model = SimpleSeq2seq(input_dim=word2vec_dimension, hidden_dim=1000, output_length=output_length, depth=2,
+                              output_dim=nb_classes)
+        model.compile(loss='cosine_proximity', optimizer='rmsprop')
+        return model

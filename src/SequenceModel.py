@@ -14,14 +14,14 @@ class SequenceModel:
     The offline class to train and test model for sequence to sequence learning.
     """
 
-    def __init__(self, vector_dimension=None, input_length=None, model=None):
+    def __init__(self, vector_dimension=None, input_length=None, model=None, model_type=None):
         output_length = input_length
         if model:
             self.model = model
         else:
             if not (vector_dimension and input_length and output_length):
                 raise Exception('Need to either provide model or specify shape')
-            self.model = ModelFactory.get_model(ModelType.Sequence10k,
+            self.model = ModelFactory.get_model(model_type=model_type,
                                                 input_shape=(input_length, vector_dimension),
                                                 nb_classes=vector_dimension, output_length=output_length)
         print(self.model.summary())

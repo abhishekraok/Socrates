@@ -6,6 +6,7 @@ from SequenceModel import SequenceModel
 from SequenceProcessor import SequenceProcessor
 from TextPredictor import TextPredictor
 from Word2Vec import Word2Vec
+from ModelFactory import ModelType
 
 
 class Trainer:
@@ -56,14 +57,14 @@ def train_dummy():
 def train_movie():
     conversation_file = '../data/movie_lines_cleaned_10k.txt'
     lines = ConversationLoader.load_conversation_file(conversation_file, reverse=False)
-    model_file_name = '../models/movie_lines_10k'
+    model_file_name = '../models/movie_lines_10k_lstm1k'
     w2v = Word2Vec()
     sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=40)
-    model = SequenceModel(Constants.Word2VecConstant, input_length=40)
+    model = SequenceModel(Constants.Word2VecConstant, input_length=40, model_type=ModelType.SeqLayer2Dim1k)
     trainer = Trainer(model_file_name=model_file_name, sequence_processor=sp, sequence_model=model)
     tp = TextPredictor(model=trainer.sequence_model, sequence_processor=sp)
-    for i in range(50):
-        trainer.train_on_conversation(conversation=lines, epochs=10)
+    for i in range(500):
+        trainer.train_on_conversation(conversation=lines, epochs=1)
         queries = ['who are you', 'how are you', 'what do you want']
         for query in queries:
             reply = tp.get_reply_for_single_query(query)

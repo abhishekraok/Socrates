@@ -12,3 +12,4 @@ class ModelType(Enum):
     Sequence = 2
     SequenceBitAdvanced = 3
     Sequence10k = 4
+    SeqLayer2Dim1k = 5
