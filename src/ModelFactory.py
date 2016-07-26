@@ -29,6 +29,9 @@ class ModelFactory(object):
         if model_type.value == ModelType.Sequence10k.value:
             return ModelFactory.get_10k_sequence_model(input_shape=input_shape, nb_classes=nb_classes,
                                                        output_length=output_length)
+        if model_type.value == ModelType.SeqLayer2Dim1k.value:
+            return ModelFactory.get_2layer_1k_model(input_shape=input_shape, nb_classes=nb_classes,
+                                                    output_length=output_length)
         raise Exception("Model type not understood " + str(model_type))
 
     @staticmethod
@@ -85,5 +88,5 @@ class ModelFactory(object):
         word2vec_dimension = input_shape[1]
         model = SimpleSeq2seq(input_dim=word2vec_dimension, hidden_dim=1000, output_length=output_length, depth=2,
                               output_dim=nb_classes)
-        model.compile(loss='cosine_proximity', optimizer='rmsprop')
+        model.compile(loss='cosine_proximity', optimizer='rmsprop', clipnorm=0.1)
         return model

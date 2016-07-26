@@ -101,19 +101,8 @@ class TestWordMap(TestCase):
         numbers = wm.words_to_numbers(message)
         decoded_message = wm.numbers_to_words(numbers)
         self.assertEqual(decoded_message, ['how', WordMap.Unknown, 'are', 'hi'])
-        # def test_words_to_nums(self):
-        #     words_list = ['aha', 'bat', 'cat', 'aha']
-        #     nums, vocab = text_preprocessing.words_to_numbers(words_list)
-        #     self.assertEqual([0, 1, 2, 0], nums)
-        #
-        # def test_nums_to_words(self):
-        #     words_list = ['aha', 'bat', 'cat', 'aha']
-        #     nums, vocab = text_preprocessing.words_to_numbers(words_list)
-        #     decoded_words = text_preprocessing.numbers_to_words(nums, vocab)
-        #     self.assertEqual(decoded_words, words_list)
 
 
-# class TestText(TestCase):
 class TestKeras(TestCase):
     def test_model_compiles(self):
         model = Sequential([
