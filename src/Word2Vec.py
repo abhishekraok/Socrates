@@ -8,7 +8,10 @@ class Word2Vec(object):
 	# gets vector for particular word
 	# word: the word for which vector is requested
 	def get_vector(self,word):
-		return self.model[word]
+		try:
+			return self.model[word]
+		except KeyError:
+			return None
 
 	#gets top_n words for particular vector
 	# vector: wordvector n: number of similar words required
@@ -23,3 +26,6 @@ if __name__=="__main__":
 	#print "vector for ",word,":",vector
 	derived_word=model.get_top_word(vector)
 	print "derived word from the vector:",derived_word
+	print "weird word test"
+	weird_word="adadadadadooooo"
+	print "vector:",model.get_vector(weird_word)
