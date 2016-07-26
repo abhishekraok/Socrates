@@ -156,4 +156,4 @@ class TestWord2Vec(TestCase):
         self.assertEqual(matrix.shape[0], words_in_sentence)
         self.assertEqual(matrix.shape[1], Constants.Word2VecConstant)
         decoded_line = sp.matrix_to_line(matrix)
-        self.assertEqual(line, decoded_line)
+        self.assertEqual(line, decoded_line.strip())

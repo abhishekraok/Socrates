@@ -29,16 +29,19 @@ class Word2Vec(object):
         else:
             return Word2Vec.UnknownVector
 
-    # gets top_n words for particular vector
-    # vector: wordvector n: number of similar words required
     def get_words(self, vector, n=10):
-        if np.all((i == 0) for i in vector):
-            return ''
-        if np.all((i == 1 for i in vector)):
-            return Constants.UnknownWord
         return self.model.similar_by_vector(vector, topn=n)[0][0]
 
     def get_top_word(self, vector):
+        """
+        if vector is all 0 returns blank  string, if vector is all 1 returns Unknown word
+        :param vector: np.array of dimension Word2VecDimension
+        :return: word
+        """
+        if np.all([(i == 0) for i in vector]):
+            return ''
+        if np.all([i == 1 for i in vector]):
+            return Constants.UnknownWord
         return self.get_words(vector, 1)
 
 
