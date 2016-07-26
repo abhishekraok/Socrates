@@ -44,6 +44,7 @@ class SequenceModel:
 
     def save(self, file_name):
         json_string = self.model.to_json()
+        json_string.replace('SimpleSeq2seq', 'Sequential')
         json_file_name, h5_file_name = TpModel.get_full_file_names(file_name)
         open(json_file_name, 'w').write(json_string)
         self.model.save_weights(h5_file_name, overwrite=True)
