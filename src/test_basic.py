@@ -144,8 +144,8 @@ class TestWord2Vec(TestCase):
     def test_word_vec(self):
         word = "Congratulations"
         model = Word2Vec()
-        words = model.get_top_word(model.get_vector(word))
-        derived_word = words[0]
+        word = model.get_top_word(model.get_vector(word))
+        derived_word = word
         self.assertEqual(word, derived_word)
 
 
