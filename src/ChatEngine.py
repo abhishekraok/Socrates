@@ -29,7 +29,7 @@ class ChatEngine():
         action_list = self.query_understander.get_actions(query)
         for action_i in action_list:
             if action_i is Actions.predict:
-                reply = self.text_predictor.get_reply(query)
+                reply = self.text_predictor.get_reply_for_single_query(query)
         return reply
 
 

@@ -44,10 +44,14 @@ class SequenceProcessor:
     def matrix_to_line(self, reply_vector):
         return ' '.join(self.vectorizer.get_top_word(i) for i in reply_vector if i is not '')
 
+    def conversation_to_tensor(self, lines):
+        tensor = np.stack((self.line_to_matrix(line) for line in lines), axis=0)
+        return tensor
+
     def file_to_tensor(self, conversation_file):
         with open(conversation_file, 'r') as f:
             lines = f.readlines()
-            tensor = np.stack((self.line_to_matrix(line) for line in lines), axis=0)
+            tensor = self.conversation_to_tensor(lines)
             print('Created a tensor of shape ', tensor.shape, ' from file ', conversation_file)
             return tensor
 

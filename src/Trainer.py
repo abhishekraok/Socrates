@@ -5,6 +5,7 @@ from SequenceModel import SequenceModel
 from SequenceProcessor import SequenceProcessor
 from Word2Vec import Word2Vec
 import os
+from TextPredictor import TextPredictor
 
 
 class Trainer:
@@ -27,7 +28,7 @@ class Trainer:
         self.sequence_processor = sequence_processor
         self.save_file_name = model_file_name
 
-    def train_on_conversation_file(self, conversation_file):
+    def train_on_conversation_file(self, conversation_file, epochs=1):
         """
         Trains on a file, and saves it to save_file_name, overwrites.
 
@@ -37,7 +38,7 @@ class Trainer:
         x_in = self.sequence_processor.file_to_tensor(conversation_file)
         y = x_in[1:, :, :]  # y is the next line of the conversation
         x = x_in[:-1, :, :]  # remove last line to make shape of x = shape of y
-        self.sequence_model.train(x=x, y=y, epoch=1)
+        self.sequence_model.train(x=x, y=y, epoch=epochs)
         self.sequence_model.save(self.save_file_name)
 
 
@@ -55,8 +56,15 @@ def train_movie():
     model_file_name = '../models/movie_lines_10k'
     w2v = Word2Vec()
     sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=40)
-    tp = Trainer(model_file_name=model_file_name, sequence_processor=sp)
-    tp.train_on_conversation_file(conversation_file)
+    trainer = Trainer(model_file_name=model_file_name, sequence_processor=sp)
+    tp = TextPredictor(model=trainer.sequence_model, sequence_processor=sp)
+    for i in range(50):
+        trainer.train_on_conversation_file(conversation_file, epochs=1)
+        queries = ['who are you', 'how are you', 'what do you want']
+        for i in range(40):
+            reply = tp.get_reply_from_history(queries)
+            print('Bot:', reply)
+            queries.append(reply)
 
 
 if __name__ == '__main__':

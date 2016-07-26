@@ -1,30 +1,36 @@
 from __future__ import print_function
 
-import os
+import numpy as np
 
-from EnumsCollection import ModelType
 from SequenceModel import SequenceModel
-from TPModel import TpModel
-from Constants import Constants
 from SequenceProcessor import SequenceProcessor
 from Word2Vec import Word2Vec
 
 
 class TextPredictor:
-    def __init__(self, model_file_name, sequence_processor, input_length, output_length):
+    def __init__(self, model, sequence_processor):
         """
 
+        :type model: SequenceModel
         :type sequence_processor: SequenceProcessor
         """
-        if model_file_name:
-            self.sequence_model = SequenceModel.load(model_file_name)
-        else:
-            self.sequence_model = SequenceModel(vector_dimension=Constants.Word2VecConstant,
-                                                input_length=input_length, output_length=output_length)
+        self.sequence_model = model
         self.sequence_processor = sequence_processor
-        self.save_file_name = model_file_name
 
-    def get_reply(self, user_text):
-        x_in = self.sequence_processor.line_to_matrix(user_text)
+    def get_reply_for_single_query(self, user_text):
+        matrix = self.sequence_processor.line_to_matrix(user_text)
+        x_in = np.stack([matrix])
         reply_vector = self.sequence_model.predict(x_in)
         return self.sequence_processor.matrix_to_line(reply_vector)
+
+    def get_reply_from_history(self, past_converation):
+        tensor = self.sequence_processor.conversation_to_tensor(past_converation)
+        reply_vector = self.sequence_model.predict(tensor)
+        return self.sequence_processor.matrix_to_line(reply_vector)
+
+
+if __name__ == '__main__':
+    sequence_model = SequenceModel.load('../models/movie_lines_10k')
+    sp = SequenceProcessor(Word2Vec(), words_in_sentence=40)
+    tp = TextPredictor(model=sequence_model, sequence_processor=sp)
+    print(tp.get_reply_for_single_query('who are you'))
