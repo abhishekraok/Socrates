@@ -137,7 +137,7 @@ class TestKeras(TestCase):
         f1 = f1_score(labels, predicted)
         self.assertGreater(f1, 0.7)
 
-class TestWord2Vec(self):
+class TestWord2Vec(TestCase):
     def test_word_vec(self):
         word="Congratulations"
         model=Word2Vec()
