@@ -11,7 +11,9 @@ class Word2Vec(object):
     def __init__(self, path='../data/GoogleNews-vectors-negative300.bin'):
         if not os.path.isfile(path):
             raise Exception('Word2Vec file ' + path + ' not found')
+        print('Initializing Word2Vec from file ', path)
         self.model = gensim.models.Word2Vec.load_word2vec_format(path, binary=True)
+        print('Initialization complete')
 
     def get_vector(self, word):
         """

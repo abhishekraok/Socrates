@@ -138,21 +138,19 @@ class TestKeras(TestCase):
 
 
 class TestWord2Vec(TestCase):
+    model = Word2Vec()
+
     def test_word_vec(self):
         word = "Congratulations"
-        model = Word2Vec()
-        word = model.get_top_word(model.get_vector(word))
-        derived_word = word
+        derived_word = TestWord2Vec.model.get_top_word(TestWord2Vec.model.get_vector(word))
         self.assertEqual(word, derived_word)
 
-
-class TestSequenceProcessor(TestCase):
     def test_line_to_matrix(self):
+        w2v = TestWord2Vec.model
         line = 'hello how are you'
-        w2v = Word2Vec()
         sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=10)
         matrix = sp.line_to_matrix(line)
         self.assertEqual(len(matrix.shape), 2)
-        self.assertEqual(matrix.shape[1], 4)
+        self.assertEqual(matrix.shape[0], 4)
         decoded_line = sp.matrix_to_line(matrix)
         self.assertEqual(line, decoded_line)

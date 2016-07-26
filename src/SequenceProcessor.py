@@ -30,7 +30,7 @@ class SequenceProcessor:
         return np.vstack((self.vectorizer.get_vector(i) for i in words_list))
 
     def matrix_to_line(self, reply_vector):
-        return ' '.join(self.vectorizer.get_words(i) for i in reply_vector)
+        return ' '.join(self.vectorizer.get_top_word(i) for i in reply_vector)
 
     def file_to_tensor(self, conversation_file):
         with open(conversation_file, 'r') as f:

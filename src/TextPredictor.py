@@ -22,6 +22,7 @@ class TextPredictor:
             self.sequence_model = SequenceModel(vector_dimension=Constants.Word2VecConstant,
                                                 input_length=input_length, output_length=output_length)
         self.sequence_processor = sequence_processor
+        self.save_file_name = model_file_name
 
     def get_reply(self, user_text):
         x_in = self.sequence_processor.line_to_matrix(user_text)
@@ -29,11 +30,18 @@ class TextPredictor:
         return self.sequence_processor.matrix_to_line(reply_vector)
 
     def train_on_conversation_file(self, conversation_file):
+        """
+        Trains on a file, and saves it to save_file_name, overwrites.
+
+        :param conversation_file: A text file with each line
+        :return:
+        """
         text = self.sequence_processor.file_to_tensor(conversation_file)
         x_in = self.sequence_processor.line_to_matrix(text)
         y = x_in[1:, :, :]  # y is the next line of the conversation
         x = x_in[:-1, :, :]  # remove last line to make shape of x = shape of y
         self.sequence_model.train(x=x, y=y, epoch=1)
+        self.sequence_model.save(self.save_file_name)
 
 
 if __name__ == '__main__':
