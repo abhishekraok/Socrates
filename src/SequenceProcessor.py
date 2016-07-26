@@ -25,6 +25,7 @@ class SequenceProcessor:
         """
         self.vectorizer = word2Vec
         self.words_in_sentence = words_in_sentence
+        self.blank_vector = word2Vec.get_vector(' ')
 
     def line_to_matrix(self, user_text, verbose=False):
         """
@@ -36,9 +37,12 @@ class SequenceProcessor:
         if verbose and len(words_list) > self.words_in_sentence:
             print('Warning, length of sentence ', user_text, ' is greater than limit. Will chop it off')
         matrix = np.zeros((self.words_in_sentence, Constants.Word2VecConstant))
-        vector_list = (self.vectorizer.get_vector(i) for i in words_list[:self.words_in_sentence])
+        vector_list = [self.vectorizer.get_vector(i) for i in words_list[:self.words_in_sentence]]
         for i, vector in enumerate(vector_list):
             matrix[i, :] = vector
+        # fill remaining words in sentence with blanks
+        for i in range(len(vector_list),matrix.shape[0]):
+            matrix[i,:] = self.blank_vector
         return matrix
 
     def matrix_to_line(self, reply_vector):

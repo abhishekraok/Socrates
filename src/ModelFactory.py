@@ -69,7 +69,7 @@ class ModelFactory(object):
         return model
 
     @staticmethod
-    def get_10_sequence_model(input_shape, nb_classes, output_length):
+    def get_10k_sequence_model(input_shape, nb_classes, output_length):
         if not output_length:
             raise Exception('Output Length required for sequence model')
         word2vec_dimension = input_shape[1]

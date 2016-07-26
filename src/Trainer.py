@@ -1,12 +1,11 @@
 from __future__ import print_function
 
 from Constants import Constants
+from ConversationLoader import ConversationLoader
 from SequenceModel import SequenceModel
 from SequenceProcessor import SequenceProcessor
-from Word2Vec import Word2Vec
-import os
 from TextPredictor import TextPredictor
-from ConversationLoader import ConversationLoader
+from Word2Vec import Word2Vec
 
 
 class Trainer:

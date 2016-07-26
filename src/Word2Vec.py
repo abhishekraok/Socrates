@@ -6,7 +6,6 @@ import os
 
 
 class Word2Vec(object):
-    UnknownVector = np.ones((1, Constants.Word2VecConstant))
     BlankVector = np.zeros((1, Constants.Word2VecConstant))
 
     def __init__(self, path='../data/GoogleNews-vectors-negative300.bin'):
@@ -27,7 +26,7 @@ class Word2Vec(object):
         if word in self.model:
             return self.model[word]
         else:
-            return Word2Vec.UnknownVector
+            return self.model[' ']
 
     def get_words(self, vector, n=10):
         return self.model.similar_by_vector(vector, topn=n)[0][0]
@@ -40,8 +39,6 @@ class Word2Vec(object):
         """
         if np.all([(i == 0) for i in vector]):
             return ''
-        if np.all([i == 1 for i in vector]):
-            return Constants.UnknownWord
         return self.get_words(vector, 1)
 
 
