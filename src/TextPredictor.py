@@ -26,7 +26,8 @@ class TextPredictor:
     def get_reply_from_history(self, past_converation):
         tensor = self.sequence_processor.conversation_to_tensor(past_converation)
         reply_vector = self.sequence_model.predict(tensor)
-        return self.sequence_processor.matrix_to_line(reply_vector)
+        print('shape of reply vector', reply_vector.shape)
+        return self.sequence_processor.matrix_to_line(reply_vector[-1,:,:])
 
 
 if __name__ == '__main__':

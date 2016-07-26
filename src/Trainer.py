@@ -61,7 +61,7 @@ def train_movie():
     for i in range(50):
         trainer.train_on_conversation_file(conversation_file, epochs=1)
         queries = ['who are you', 'how are you', 'what do you want']
-        for i in range(40):
+        for i in range(10):
             reply = tp.get_reply_from_history(queries)
             print('Bot:', reply)
             queries.append(reply)

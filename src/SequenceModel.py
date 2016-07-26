@@ -27,7 +27,7 @@ class SequenceModel:
     def predict(self, x_in):
         if len(x_in.shape) is not 3:
             raise Exception('Predict needs dimension 3 input')
-        self.model.predict(x_in)
+        return self.model.predict(x_in)
 
     def train(self, x, y, epoch=1):
         print('Training with input shape', x.shape, ' and output shape ', y.shape)
