@@ -2,12 +2,15 @@ from __future__ import print_function
 import gensim
 from Constants import Constants
 import numpy as np
+import os
 
 
 class Word2Vec(object):
     UnknownVector = np.zeros((1, Constants.Word2VecConstant))
 
     def __init__(self, path='../data/GoogleNews-vectors-negative300.bin'):
+        if not os.path.isfile(path):
+            raise Exception('Word2Vec file ' + path + ' not found')
         self.model = gensim.models.Word2Vec.load_word2vec_format(path, binary=True)
 
     def get_vector(self, word):

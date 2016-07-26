@@ -131,9 +131,6 @@ class TestKeras(TestCase):
         model = Sequential()
         model.add(Dense(1, input_dim=input_dimension, activation='softmax'))
         model.compile(optimizer='rmsprop', loss='binary_crossentropy')
-        # generate dummy data
-        # train the model, iterating on the data in batches
-        # of 32 samples
         model.fit(data, labels, nb_epoch=1, batch_size=32)
         predicted = model.predict(data)
         f1 = f1_score(labels, predicted)
@@ -154,7 +151,7 @@ class TestSequenceProcessor(TestCase):
         line = 'hello how are you'
         w2v = Word2Vec()
         sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=10)
-        matrix = sp.line_to_matrix(sp)
+        matrix = sp.line_to_matrix(line)
         self.assertEqual(len(matrix.shape), 2)
         self.assertEqual(matrix.shape[1], 4)
         decoded_line = sp.matrix_to_line(matrix)
