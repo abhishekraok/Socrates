@@ -26,6 +26,9 @@ class ModelFactory(object):
         if model_type.value == ModelType.SequenceBitAdvanced.value:
             return ModelFactory.get_bit_advanced_sequence_model(input_shape=input_shape, nb_classes=nb_classes,
                                                                 output_length=output_length)
+        if model_type.value == ModelType.Sequence10k.value:
+            return ModelFactory.get_10k_sequence_model(input_shape=input_shape, nb_classes=nb_classes,
+                                                       output_length=output_length)
         raise Exception("Model type not understood " + str(model_type))
 
     @staticmethod
@@ -64,3 +67,14 @@ class ModelFactory(object):
                               output_dim=nb_classes)
         model.compile(loss='mean_squared_error', optimizer='rmsprop')
         return model
+
+    @staticmethod
+    def get_10_sequence_model(input_shape, nb_classes, output_length):
+        if not output_length:
+            raise Exception('Output Length required for sequence model')
+        word2vec_dimension = input_shape[1]
+        model = SimpleSeq2seq(input_dim=word2vec_dimension, hidden_dim=10000, output_length=output_length,
+                              output_dim=nb_classes)
+        model.compile(loss='cosine_proximity', optimizer='rmsprop')
+        return model
+        pass

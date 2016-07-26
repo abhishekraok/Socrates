@@ -31,7 +31,10 @@ class TextPredictor:
 
 
 if __name__ == '__main__':
-    sequence_model = SequenceModel.load('../models/movie_lines_10k')
+    sequence_model = SequenceModel.load('../models/movie_lines_10k_changed')
     sp = SequenceProcessor(Word2Vec(), words_in_sentence=40)
     tp = TextPredictor(model=sequence_model, sequence_processor=sp)
-    print(tp.get_reply_for_single_query('who are you'))
+    for i in range(3):
+        input_query = raw_input('User:')
+        reply = tp.get_reply_for_single_query(input_query)
+        print('Bot:',reply)

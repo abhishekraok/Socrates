@@ -26,14 +26,14 @@ class SequenceProcessor:
         self.vectorizer = word2Vec
         self.words_in_sentence = words_in_sentence
 
-    def line_to_matrix(self, user_text):
+    def line_to_matrix(self, user_text, verbose=False):
         """
         Creates a matrix for given line.
         :param user_text:
         :return: np.array of dimension (words_in_sentence,
         """
         words_list = clean_text_to_words_list(user_text)
-        if len(words_list) > self.words_in_sentence:
+        if verbose and len(words_list) > self.words_in_sentence:
             print('Warning, length of sentence ', user_text, ' is greater than limit. Will chop it off')
         matrix = np.zeros((self.words_in_sentence, Constants.Word2VecConstant))
         vector_list = (self.vectorizer.get_vector(i) for i in words_list[:self.words_in_sentence])
@@ -46,6 +46,7 @@ class SequenceProcessor:
 
     def conversation_to_tensor(self, lines):
         tensor = np.stack((self.line_to_matrix(line) for line in lines), axis=0)
+        print('Created a tensor of shape ', tensor.shape)
         return tensor
 
     def file_to_tensor(self, conversation_file):
@@ -55,6 +56,6 @@ class SequenceProcessor:
             print('Created a tensor of shape ', tensor.shape, ' from file ', conversation_file)
             return tensor
 
-    def converstaion_text_file_to_tensor_file(self, conversation_file, output_file_name):
+    def conversation_text_file_to_tensor_file(self, conversation_file, output_file_name):
         tensor = self.file_to_tensor(conversation_file)
         np.savetxt(fname=output_file_name, X=tensor, delimiter=',')

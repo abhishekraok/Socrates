@@ -11,3 +11,4 @@ class ModelType(Enum):
     SimplestModel = 1
     Sequence = 2
     SequenceBitAdvanced = 3
+    Sequence10k = 4

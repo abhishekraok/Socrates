@@ -14,7 +14,8 @@ class SequenceModel:
     The offline class to train and test model for sequence to sequence learning.
     """
 
-    def __init__(self, vector_dimension=None, input_length=None, output_length=None, model=None):
+    def __init__(self, vector_dimension=None, input_length=None, model=None):
+        output_length = input_length
         if model:
             self.model = model
         else:
@@ -23,6 +24,7 @@ class SequenceModel:
             self.model = ModelFactory.get_model(ModelType.SequenceBitAdvanced,
                                                 input_shape=(input_length, vector_dimension),
                                                 nb_classes=vector_dimension, output_length=output_length)
+        print(self.model.summary())
 
     def predict(self, x_in):
         if len(x_in.shape) is not 3:
