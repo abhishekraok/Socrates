@@ -42,7 +42,6 @@ class SequenceProcessor:
         return matrix
 
     def matrix_to_line(self, reply_vector):
-        print(reply_vector.shape)
         return ' '.join(self.vectorizer.get_top_word(i) for i in reply_vector if i is not '')
 
     def conversation_to_tensor(self, lines):

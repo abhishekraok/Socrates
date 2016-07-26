@@ -21,10 +21,10 @@ class TextPredictor:
         matrix = self.sequence_processor.line_to_matrix(user_text)
         x_in = np.stack([matrix])
         reply_vector = self.sequence_model.predict(x_in)
-        return self.sequence_processor.matrix_to_line(reply_vector)
+        return self.sequence_processor.matrix_to_line(reply_vector[0,:,:])
 
-    def get_reply_from_history(self, past_converation):
-        tensor = self.sequence_processor.conversation_to_tensor(past_converation)
+    def get_reply_from_history(self, past_conversation):
+        tensor = self.sequence_processor.conversation_to_tensor(past_conversation)
         reply_vector = self.sequence_model.predict(tensor)
         print('shape of reply vector', reply_vector.shape)
         return self.sequence_processor.matrix_to_line(reply_vector[-1,:,:])

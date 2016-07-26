@@ -59,12 +59,11 @@ def train_movie():
     trainer = Trainer(model_file_name=model_file_name, sequence_processor=sp)
     tp = TextPredictor(model=trainer.sequence_model, sequence_processor=sp)
     for i in range(50):
-        trainer.train_on_conversation_file(conversation_file, epochs=1)
+        trainer.train_on_conversation_file(conversation_file, epochs=10)
         queries = ['who are you', 'how are you', 'what do you want']
-        for i in range(10):
-            reply = tp.get_reply_from_history(queries)
+        for query in queries:
+            reply = tp.get_reply_for_single_query(query)
             print('Bot:', reply)
-            queries.append(reply)
 
 
 if __name__ == '__main__':
