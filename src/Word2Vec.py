@@ -8,10 +8,6 @@ class Word2Vec(object):
     UnknownVector = np.zeros((1, Constants.Word2VecConstant))
 
     def __init__(self, path='../data/GoogleNews-vectors-negative300.bin'):
-        """ initializer
-
-        :param path: path for vector binary dataset
-        """
         self.model = gensim.models.Word2Vec.load_word2vec_format(path, binary=True)
 
     def get_vector(self, word):
@@ -22,12 +18,15 @@ class Word2Vec(object):
         :param word: the word for which vector is requested
         :rtype: np.array
         """
-        return self.model.get(word, Word2Vec.UnknownVector)
+        return self.model[word]
 
     # gets top_n words for particular vector
     # vector: wordvector n: number of similar words required
     def get_words(self, vector, n=10):
-        return self.model.similar_by_vector(vector, topn=n)
+        return self.model.similar_by_vector(vector, topn=n)[0][0]
+
+    def get_top_word(self, vector):
+        return self.get_words(vector, 1)
 
 
 if __name__ == "__main__":

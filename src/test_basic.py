@@ -12,7 +12,6 @@ from TextPreProcessor import TextPreProcessor
 from WordMap import WordMap
 from Word2Vec import Word2Vec
 from SequenceProcessor import SequenceProcessor
-from Constants import Constants
 
 
 class TestTPModel(TestCase):
@@ -145,7 +144,7 @@ class TestWord2Vec(TestCase):
     def test_word_vec(self):
         word = "Congratulations"
         model = Word2Vec()
-        words = model.get_words(model.get_vector(word))
+        words = model.get_top_word(model.get_vector(word))
         derived_word = words[0]
         self.assertEqual(word, derived_word)
 
