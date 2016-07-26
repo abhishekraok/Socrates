@@ -11,11 +11,14 @@ class Trainer:
     """
     Responsible for training models offline.
     """
-    def __init__(self, model_file_name, sequence_processor, input_length, output_length):
+
+    def __init__(self, model_file_name, sequence_processor):
         """
 
         :type sequence_processor: SequenceProcessor
         """
+        input_length = sequence_processor.words_in_sentence
+        output_length = sequence_processor.words_in_sentence
         if model_file_name and os.path.isfile(model_file_name):
             self.sequence_model = SequenceModel.load(model_file_name)
         else:
@@ -37,18 +40,24 @@ class Trainer:
         self.sequence_model.train(x=x, y=y, epoch=1)
         self.sequence_model.save(self.save_file_name)
 
-def train_on_movie_conversation():
+
+def train_dummy():
     conversation_file = '../data/dummy_convo.txt'
     model_file_name = '../models/dummy_model'
     w2v = Word2Vec()
     sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=20)
-    tp = Trainer(model_file_name=model_file_name, sequence_processor=sp, input_length=20, output_length=20)
+    tp = Trainer(model_file_name=model_file_name, sequence_processor=sp)
     tp.train_on_conversation_file(conversation_file)
 
-if __name__ == '__main__':
-    conversation_file = '../data/dummy_convo.txt'
-    model_file_name = '../models/dummy_model'
+
+def train_movie():
+    conversation_file = '../data/movie_lines_cleaned_10k.txt'
+    model_file_name = '../models/movie_lines_10k'
     w2v = Word2Vec()
-    sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=20)
-    tp = Trainer(model_file_name=model_file_name, sequence_processor=sp, input_length=20, output_length=20)
+    sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=40)
+    tp = Trainer(model_file_name=model_file_name, sequence_processor=sp)
     tp.train_on_conversation_file(conversation_file)
+
+
+if __name__ == '__main__':
+    train_movie()

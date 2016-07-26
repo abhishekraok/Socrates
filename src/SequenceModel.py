@@ -20,7 +20,8 @@ class SequenceModel:
         else:
             if not (vector_dimension and input_length and output_length):
                 raise Exception('Need to either provide model or specify shape')
-            self.model = ModelFactory.get_model(ModelType.Sequence, input_shape=(input_length, vector_dimension),
+            self.model = ModelFactory.get_model(ModelType.SequenceBitAdvanced,
+                                                input_shape=(input_length, vector_dimension),
                                                 nb_classes=vector_dimension, output_length=output_length)
 
     def predict(self, x_in):
