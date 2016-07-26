@@ -6,7 +6,8 @@ import os
 
 
 class Word2Vec(object):
-    UnknownVector = np.zeros((1, Constants.Word2VecConstant))
+    UnknownVector = np.ones((1, Constants.Word2VecConstant))
+    BlankVector = np.zeros((1, Constants.Word2VecConstant))
 
     def __init__(self, path='../data/GoogleNews-vectors-negative300.bin'):
         if not os.path.isfile(path):
@@ -23,11 +24,18 @@ class Word2Vec(object):
         :param word: the word for which vector is requested
         :rtype: np.array
         """
-        return self.model[word]
+        if word in self.model:
+            return self.model[word]
+        else:
+            return Word2Vec.UnknownVector
 
     # gets top_n words for particular vector
     # vector: wordvector n: number of similar words required
     def get_words(self, vector, n=10):
+        if np.all((i == 0) for i in vector):
+            return ''
+        if np.all((i == 1 for i in vector)):
+            return Constants.UnknownWord
         return self.model.similar_by_vector(vector, topn=n)[0][0]
 
     def get_top_word(self, vector):

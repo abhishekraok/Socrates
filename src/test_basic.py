@@ -12,6 +12,7 @@ from TextPreProcessor import TextPreProcessor
 from WordMap import WordMap
 from Word2Vec import Word2Vec
 from SequenceProcessor import SequenceProcessor
+from Constants import Constants
 
 
 class TestTPModel(TestCase):
@@ -148,9 +149,11 @@ class TestWord2Vec(TestCase):
     def test_line_to_matrix(self):
         w2v = TestWord2Vec.model
         line = 'hello how are you'
-        sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=10)
+        words_in_sentence = 10
+        sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=words_in_sentence)
         matrix = sp.line_to_matrix(line)
         self.assertEqual(len(matrix.shape), 2)
-        self.assertEqual(matrix.shape[0], 4)
+        self.assertEqual(matrix.shape[0], words_in_sentence)
+        self.assertEqual(matrix.shape[1], Constants.Word2VecConstant)
         decoded_line = sp.matrix_to_line(matrix)
         self.assertEqual(line, decoded_line)

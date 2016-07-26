@@ -42,6 +42,7 @@ class SequenceModel:
         json_file_name, h5_file_name = TpModel.get_full_file_names(file_name)
         open(json_file_name, 'w').write(json_string)
         self.model.save_weights(h5_file_name, overwrite=True)
+        print('Saved model to file ', file_name)
 
     @staticmethod
     def load(file_name):
