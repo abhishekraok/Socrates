@@ -11,6 +11,8 @@ from TPModel import TpModel
 from TextPreProcessor import TextPreProcessor
 from WordMap import WordMap
 from Word2Vec import Word2Vec
+from SequenceProcessor import SequenceProcessor
+
 
 class TestTPModel(TestCase):
     def test_save_load_model(self):
@@ -137,12 +139,21 @@ class TestKeras(TestCase):
         f1 = f1_score(labels, predicted)
         self.assertGreater(f1, 0.7)
 
-class TestWord2Vec(self):
-    def test_word_vec(self):
-        word="Congratulations"
-        model=Word2Vec()
-        words=model.get_words(model.get_vector(word))
-        derived_word=words[0]
-        self.assertEqual(word,derived_word)
-        
 
+class TestWord2Vec(TestCase):
+    def test_word_vec(self):
+        word = "Congratulations"
+        model = Word2Vec()
+        words = model.get_words(model.get_vector(word))
+        derived_word = words[0]
+        self.assertEqual(word, derived_word)
+
+
+class TestSequenceProcessor(TestCase):
+    def test_line_to_matrix(self):
+        line = 'hello how are you'
+        w2v = Word2Vec()
+        sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=10)
+        matrix = sp.line_to_matrix(sp)
+        decoded_line = sp.matrix_to_line(matrix)
+        self.assertEqual(line, decoded_line)

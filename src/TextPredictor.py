@@ -1,47 +1,35 @@
 from __future__ import print_function
-import pickle
+
 import os
 
-import TextPreProcessor
-from TPModel import TpModel
 from EnumsCollection import ModelType
+from SequenceModel import SequenceModel
+from TPModel import TpModel
+from Constants import Constants
+from SequenceProcessor import SequenceProcessor
 
 
 class TextPredictor:
-    def __init__(self, model_file_name, word_map_file, history_length):
-        if word_map_file:
-            self.text_processor = TextPreProcessor.TextPreProcessor(dictionary_file=word_map_file)
+    def __init__(self, model_file_name, sequence_processor, input_length, output_length):
+        """
+
+        :type sequence_processor: SequenceProcessor
+        """
+        if model_file_name:
+            self.sequence_model = SequenceModel.load(model_file_name)
         else:
-            raise Exception('Word map file needed')
-        if model_file_name and os.path.isfile(model_file_name):
-            self.model = TpModel.load(model_file_name, model_type=ModelType.FirstLSTMModel,
-                                      text_preprocessor=self.text_processor, history_length=history_length)
-        else:
-            self.model = TpModel(ModelType.FirstLSTMModel, self.text_processor, history_length=history_length)
+            self.sequence_model = SequenceModel(vector_dimension=Constants.Word2VecConstant,
+                                                input_length=input_length, output_length=output_length)
+        self.sequence_processor = sequence_processor
 
     def get_reply(self, user_text):
-        x_in, y = self.text_processor.text_to_vector(text=user_text, history_length=20)
-        reply_vector = self.model.predict(x_in)
-        return self.text_processor.vector_to_text(reply_vector)
+        x_in = self.sequence_processor.line_to_matrix(user_text)
+        reply_vector = self.sequence_model.predict(x_in)
+        return self.sequence_processor.matrix_to_line(reply_vector)
 
-
-class DummyTextPredictor(TextPredictor):
-    class DummyModel:
-        def predict(self, a):
-            return a
-
-    def __init__(self, model_file_name, word_map_file):
-        self.model = DummyTextPredictor.DummyModel()
-        self.text_processor = None
-
-
-if __name__ == '__main__':
-    tp = TextPredictor(model_file_name=None, word_map_file='../data/MostCommon2266.txt', history_length=20)
-    for i in range(20):
-        print(tp.model.train_on_text_file('../data/small_pride.txt', epochs=1))
-        you = 'how are you'
-        print('You:', you)
-        print('Bot:', tp.get_reply(you))
-        today = 'how is the day today'
-        print('You:', today)
-        print('Bot:', tp.get_reply(today))
+    def train_on_conversation_file(self, conversation_file):
+        text = self.sequence_processor.file_to_tensor(conversation_file)
+        x_in = self.sequence_processor.line_to_matrix(text)
+        y = x_in[1:, :, :]  # y is the next line of the conversation
+        x = x_in[:-1, :, :]  # remove last line to make shape of x = shape of y
+        self.sequence_model.train(x=x, y=y, epoch=1)
