@@ -56,7 +56,7 @@ def train_dummy():
 def train_movie():
     conversation_file = '../data/movie_lines_cleaned_10k.txt'
     lines = ConversationLoader.load_conversation_file(conversation_file, reverse=False)
-    model_file_name = '../models/movie_lines_300k'
+    model_file_name = '../models/movie_lines_10k'
     w2v = Word2Vec()
     sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=40)
     model = SequenceModel(Constants.Word2VecConstant, input_length=40)

@@ -21,7 +21,7 @@ class SequenceModel:
         else:
             if not (vector_dimension and input_length and output_length):
                 raise Exception('Need to either provide model or specify shape')
-            self.model = ModelFactory.get_model(ModelType.SequenceBitAdvanced,
+            self.model = ModelFactory.get_model(ModelType.Sequence10k,
                                                 input_shape=(input_length, vector_dimension),
                                                 nb_classes=vector_dimension, output_length=output_length)
         print(self.model.summary())
@@ -55,6 +55,7 @@ class SequenceModel:
         json_file_name, h5_file_name = TpModel.get_full_file_names(file_name)
         model = model_from_json(open(json_file_name, 'r').read())
         model.load_weights(h5_file_name)
+        print('Loaded file ', file_name)
         return SequenceModel(model=model)
 
     @staticmethod

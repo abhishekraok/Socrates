@@ -25,7 +25,9 @@ class SequenceProcessor:
         """
         self.vectorizer = word2Vec
         self.words_in_sentence = words_in_sentence
-        self.blank_vector = word2Vec.get_vector(' ')
+        self.blank_vector = word2Vec.BlankVector
+        self.end_of_line = 'EOL'
+        self.end_of_line_vector = self.vectorizer.get_vector(self.end_of_line)
 
     def line_to_matrix(self, user_text, verbose=False):
         """
@@ -40,13 +42,19 @@ class SequenceProcessor:
         vector_list = [self.vectorizer.get_vector(i) for i in words_list[:self.words_in_sentence]]
         for i, vector in enumerate(vector_list):
             matrix[i, :] = vector
-        # fill remaining words in sentence with blanks
-        for i in range(len(vector_list),matrix.shape[0]):
-            matrix[i,:] = self.blank_vector
+        # fill remaining words in sentence with EOL
+        for i in range(len(vector_list), matrix.shape[0]):
+            matrix[i, :] = self.end_of_line_vector
         return matrix
 
-    def matrix_to_line(self, reply_vector):
-        return ' '.join(self.vectorizer.get_top_word(i) for i in reply_vector if i is not '')
+    def matrix_to_line(self, matrix):
+        words = []
+        for vector in matrix:
+            word = self.vectorizer.get_top_word(vector)
+            if word == self.end_of_line:
+                break
+            words.append(word)
+        return ' '.join(words)
 
     def conversation_to_tensor(self, lines):
         tensor = np.stack((self.line_to_matrix(line) for line in lines), axis=0)

@@ -26,7 +26,7 @@ class Word2Vec(object):
         if word in self.model:
             return self.model[word]
         else:
-            return self.model[' ']
+            return Word2Vec.BlankVector
 
     def get_words(self, vector, n=10):
         return self.model.similar_by_vector(vector, topn=n)[0][0]

@@ -78,3 +78,4 @@ class ModelFactory(object):
         model.compile(loss='cosine_proximity', optimizer='rmsprop')
         return model
         pass
+
