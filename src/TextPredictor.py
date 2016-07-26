@@ -7,6 +7,7 @@ from SequenceModel import SequenceModel
 from TPModel import TpModel
 from Constants import Constants
 from SequenceProcessor import SequenceProcessor
+from Word2Vec import Word2Vec
 
 
 class TextPredictor:
@@ -33,3 +34,11 @@ class TextPredictor:
         y = x_in[1:, :, :]  # y is the next line of the conversation
         x = x_in[:-1, :, :]  # remove last line to make shape of x = shape of y
         self.sequence_model.train(x=x, y=y, epoch=1)
+
+
+if __name__ == '__main__':
+    conversation_file = '../data/dummy_convo.txt'
+    w2v = Word2Vec()
+    sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=20)
+    tp = TextPredictor(model_file_name=None, sequence_processor=sp, input_length=20, output_length=20)
+    tp.train_on_conversation_file(conversation_file)
