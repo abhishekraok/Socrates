@@ -70,10 +70,12 @@ def train_from_parameters(params):
         model = SequenceModel.load(model_file_name)
     else:
         model = SequenceModel(Constants.Word2VecConstant, input_length=params.sentence_length,
-                              model_type=ModelType.SeqLayer2Dim1k)
+                              model_type=params.model_type)
     trainer = Trainer(model_file_name=model_file_name, sequence_processor=sp, sequence_model=model)
     tp = TextPredictor(model=trainer.sequence_model, sequence_processor=sp)
-    for i in range(500 / params.epochs):
+    total_iterations = 500 / params.epochs
+    for i in range(total_iterations):
+        print('Iteration number ', i, '/', total_iterations)
         trainer.train_on_conversation(conversation=lines, epochs=params.epochs)
         queries = params.queries
         try:
@@ -90,7 +92,7 @@ def train_dummy():
     model_file_name = '../models/dummy_model'
     params = TrainParameters(conversation_file=conversation_file, model_file_name=model_file_name,
                              queries=['who are you', 'what do you do', 'what can you teach'],
-                             epochs=100, model_type=ModelType.Sequence, sentence_length=10)
+                             epochs=100, model_type=ModelType.Sequence10Hidden, sentence_length=10)
     train_from_parameters(params)
 
 
@@ -141,16 +143,26 @@ def train_english_stack():
             print('Got some exception')
 
 
-def train_simple_create():
-    conversation_file = '../data/simple_created.txt'
+def train_child_talk():
+    conversation_file = '../data/child_talk.txt'
     queries = ['who are you', 'what is the capital of japan',
                'do you want milk']
-    model_file_name = '../models/simple_created_100'
-    sentence_length = 20
+    model_file_name = '../models/simple_created_200'
+    sentence_length = 10
     params = TrainParameters(conversation_file=conversation_file, model_file_name=model_file_name, queries=queries,
-                             epochs=10, model_type=ModelType.Sequence100Hidden, sentence_length=sentence_length)
+                             epochs=100, model_type=ModelType.Sequence200Hidden, sentence_length=sentence_length)
+    train_from_parameters(params)
+
+
+def train_rowling():
+    conversation_file = '../data/jkrowloprah.txt'
+    queries = ['who are you', 'Thank you', 'But what do you do']
+    model_file_name = '../models/jkrowl_200'
+    sentence_length = 40
+    params = TrainParameters(conversation_file=conversation_file, model_file_name=model_file_name, queries=queries,
+                             epochs=10, model_type=ModelType.Sequence200Hidden, sentence_length=sentence_length)
     train_from_parameters(params)
 
 
 if __name__ == '__main__':
-    train_simple_create()
+    train_child_talk()

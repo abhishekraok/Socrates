@@ -18,19 +18,32 @@ class ModelFactory(object):
             return ModelFactory.get_first_lstm_model(input_shape, nb_classes=nb_classes)
         if model_type.value == ModelType.SimplestModel.value:
             return ModelFactory.get_simplest_model()
-        if model_type.value == ModelType.Sequence.value:
-            return ModelFactory.get_sequence_model(input_shape=input_shape, nb_classes=nb_classes,
-                                                   output_length=output_length)
+        if model_type.value == ModelType.Sequence10Hidden.value:
+            return ModelFactory.get_single_layer_LSTM(input_shape=input_shape, nb_classes=nb_classes,
+                                                      output_length=output_length, hidden_units=10)
         if model_type.value == ModelType.Sequence100Hidden.value:
-            return ModelFactory.get_bit_advanced_sequence_model(input_shape=input_shape, nb_classes=nb_classes,
-                                                                output_length=output_length)
+            return ModelFactory.get_single_layer_LSTM(input_shape=input_shape, nb_classes=nb_classes,
+                                                      output_length=output_length, hidden_units=100)
+        if model_type.value == ModelType.Sequence200Hidden.value:
+            return ModelFactory.get_single_layer_LSTM(input_shape=input_shape, nb_classes=nb_classes,
+                                                      output_length=output_length, hidden_units=200)
         if model_type.value == ModelType.Sequence1k.value:
-            return ModelFactory.get_1k_sequence_model(input_shape=input_shape, nb_classes=nb_classes,
-                                                      output_length=output_length)
+            return ModelFactory.get_single_layer_LSTM(input_shape=input_shape, nb_classes=nb_classes,
+                                                      output_length=output_length, hidden_units=1000)
         if model_type.value == ModelType.SeqLayer2Dim1k.value:
             return ModelFactory.get_2layer_1k_model(input_shape=input_shape, nb_classes=nb_classes,
                                                     output_length=output_length)
         raise Exception("Model type not understood " + str(model_type))
+
+    @staticmethod
+    def get_single_layer_LSTM(input_shape, nb_classes, output_length, hidden_units):
+        if not output_length:
+            raise Exception('Output Length required for sequence model')
+        word2vec_dimension = input_shape[1]
+        model = SimpleSeq2seq(input_dim=word2vec_dimension, hidden_dim=hidden_units, output_length=output_length,
+                              output_dim=nb_classes)
+        model.compile(loss='mean_squared_error', optimizer='rmsprop')
+        return model
 
     @staticmethod
     def get_first_lstm_model(input_shape, nb_classes):
@@ -47,36 +60,6 @@ class ModelFactory(object):
     def get_simplest_model():
         model = Sequential()
         model.add(Dense(1, input_dim=1))
-        return model
-
-    @staticmethod
-    def get_sequence_model(input_shape, nb_classes, output_length):
-        if not output_length:
-            raise Exception('Output Length required for sequence model')
-        word2vec_dimension = input_shape[1]
-        model = SimpleSeq2seq(input_dim=word2vec_dimension, hidden_dim=10, output_length=output_length,
-                              output_dim=nb_classes)
-        model.compile(loss='mean_squared_error', optimizer='rmsprop')
-        return model
-
-    @staticmethod
-    def get_bit_advanced_sequence_model(input_shape, nb_classes, output_length):
-        if not output_length:
-            raise Exception('Output Length required for sequence model')
-        word2vec_dimension = input_shape[1]
-        model = SimpleSeq2seq(input_dim=word2vec_dimension, hidden_dim=100, output_length=output_length,
-                              output_dim=nb_classes)
-        model.compile(loss='mean_squared_error', optimizer='rmsprop')
-        return model
-
-    @staticmethod
-    def get_1k_sequence_model(input_shape, nb_classes, output_length):
-        if not output_length:
-            raise Exception('Output Length required for sequence model')
-        word2vec_dimension = input_shape[1]
-        model = SimpleSeq2seq(input_dim=word2vec_dimension, hidden_dim=1000, output_length=output_length,
-                              output_dim=nb_classes)
-        model.compile(loss='mean_squared_error', optimizer='rmsprop')
         return model
 
     @staticmethod
