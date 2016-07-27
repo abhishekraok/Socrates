@@ -48,10 +48,17 @@ def train_dummy():
     conversation_file = '../data/dummy_convo.txt'
     model_file_name = '../models/dummy_model'
     w2v = Word2Vec()
-    sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=20)
-    model = SequenceModel(Constants.Word2VecConstant, input_length=20)
-    tp = Trainer(model_file_name=model_file_name, sequence_processor=sp, sequence_model=model)
-    tp.train_on_conversation_file(conversation_file)
+    sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=10)
+    model = SequenceModel(Constants.Word2VecConstant, input_length=10, model_type=ModelType.Sequence)
+    trainer = Trainer(model_file_name=model_file_name, sequence_processor=sp, sequence_model=model)
+    tp = TextPredictor(model=trainer.sequence_model, sequence_processor=sp)
+    for i in range(10):
+        trainer.train_on_conversation_file(conversation_file, epochs=100)
+        queries = ['who are you', 'what do you do', 'what can you teach']
+        for query in queries:
+            print('You:',query)
+            reply = tp.get_reply_for_single_query(query)
+            print('Bot:', reply)
 
 
 def train_movie():
@@ -67,9 +74,10 @@ def train_movie():
         trainer.train_on_conversation(conversation=lines, epochs=1)
         queries = ['who are you', 'how are you', 'what do you want']
         for query in queries:
+            print('You:',query)
             reply = tp.get_reply_for_single_query(query)
             print('Bot:', reply)
 
 
 if __name__ == '__main__':
-    train_movie()
+    train_dummy()

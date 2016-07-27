@@ -31,8 +31,8 @@ class TextPredictor:
 
 
 if __name__ == '__main__':
-    sequence_model = SequenceModel.load('../models/movie_lines_10k_changed')
-    sp = SequenceProcessor(Word2Vec(), words_in_sentence=40)
+    sequence_model = SequenceModel.load('../models/dummy_model')
+    sp = SequenceProcessor(Word2Vec(), words_in_sentence=20)
     tp = TextPredictor(model=sequence_model, sequence_processor=sp)
     for i in range(3):
         input_query = raw_input('User:')

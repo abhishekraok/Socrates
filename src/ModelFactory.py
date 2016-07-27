@@ -78,7 +78,7 @@ class ModelFactory(object):
         word2vec_dimension = input_shape[1]
         model = SimpleSeq2seq(input_dim=word2vec_dimension, hidden_dim=1000, output_length=output_length,
                               output_dim=nb_classes)
-        model.compile(loss='cosine_proximity', optimizer='rmsprop')
+        model.compile(loss='mean_squared_error', optimizer='rmsprop')
         return model
 
     @staticmethod
@@ -88,5 +88,5 @@ class ModelFactory(object):
         word2vec_dimension = input_shape[1]
         model = SimpleSeq2seq(input_dim=word2vec_dimension, hidden_dim=1000, output_length=output_length, depth=2,
                               output_dim=nb_classes)
-        model.compile(loss='cosine_proximity', optimizer='rmsprop')
+        model.compile(loss='mean_squared_error', optimizer='rmsprop')
         return model
