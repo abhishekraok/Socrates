@@ -8,10 +8,10 @@ You will need to download word2vec pre trained file from https://code.google.com
 Please place conversation files in data folder. The expected format of conversation file is each conversation is a text file, and in that file each conversation is a separate line. 
 
 e.g. 
-hi
-hello
-how are you
-I'm good, thank you
+- hi
+- hello
+- how are you
+- I'm good, thank you`
 
 ## Learning
 The model tries to predict next line from the current line. 
