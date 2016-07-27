@@ -19,6 +19,7 @@ class SequenceModel:
         if model:
             self.model = model
         else:
+            print('Creating model of dimension ', input_length, vector_dimension, ' and output len ', output_length)
             if not (vector_dimension and input_length and output_length):
                 raise Exception('Need to either provide model or specify shape')
             self.model = ModelFactory.get_model(model_type=model_type,
@@ -44,7 +45,7 @@ class SequenceModel:
 
     def save(self, file_name):
         json_string = self.model.to_json()
-        json_string.replace('SimpleSeq2seq', 'Sequential')
+        json_string = json_string.replace('SimpleSeq2seq', 'Sequential')
         json_file_name, h5_file_name = TpModel.get_full_file_names(file_name)
         open(json_file_name, 'w').write(json_string)
         self.model.save_weights(h5_file_name, overwrite=True)
@@ -54,6 +55,7 @@ class SequenceModel:
     def load(file_name):
         json_file_name, h5_file_name = TpModel.get_full_file_names(file_name)
         model = model_from_json(open(json_file_name, 'r').read())
+        model.compile(optimizer='rmsprop', loss='mse')
         model.load_weights(h5_file_name)
         print('Loaded file ', file_name)
         return SequenceModel(model=model)
@@ -65,3 +67,8 @@ class SequenceModel:
                 os.remove(full_file_name)
             except OSError:
                 pass
+
+    @staticmethod
+    def isfile(model_file_name):
+        json_file_name, h5_file_name = TpModel.get_full_file_names(model_file_name)
+        return os.path.isfile(json_file_name) and os.path.isfile(h5_file_name)

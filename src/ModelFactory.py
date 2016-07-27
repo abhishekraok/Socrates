@@ -23,12 +23,12 @@ class ModelFactory(object):
         if model_type.value == ModelType.Sequence.value:
             return ModelFactory.get_sequence_model(input_shape=input_shape, nb_classes=nb_classes,
                                                    output_length=output_length)
-        if model_type.value == ModelType.SequenceBitAdvanced.value:
+        if model_type.value == ModelType.Sequence100Hidden.value:
             return ModelFactory.get_bit_advanced_sequence_model(input_shape=input_shape, nb_classes=nb_classes,
                                                                 output_length=output_length)
-        if model_type.value == ModelType.Sequence10k.value:
-            return ModelFactory.get_10k_sequence_model(input_shape=input_shape, nb_classes=nb_classes,
-                                                       output_length=output_length)
+        if model_type.value == ModelType.Sequence1k.value:
+            return ModelFactory.get_1k_sequence_model(input_shape=input_shape, nb_classes=nb_classes,
+                                                      output_length=output_length)
         if model_type.value == ModelType.SeqLayer2Dim1k.value:
             return ModelFactory.get_2layer_1k_model(input_shape=input_shape, nb_classes=nb_classes,
                                                     output_length=output_length)
@@ -72,7 +72,7 @@ class ModelFactory(object):
         return model
 
     @staticmethod
-    def get_10k_sequence_model(input_shape, nb_classes, output_length):
+    def get_1k_sequence_model(input_shape, nb_classes, output_length):
         if not output_length:
             raise Exception('Output Length required for sequence model')
         word2vec_dimension = input_shape[1]
