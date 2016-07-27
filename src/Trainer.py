@@ -10,6 +10,16 @@ from ModelFactory import ModelType
 import os
 
 
+class TrainParameters:
+    def __init__(self, model_file_name, queries, epochs, conversation_file, model_type, sentence_length):
+        self.model_file_name = model_file_name
+        self.queries = queries
+        self.epochs = epochs
+        self.conversation_file = conversation_file
+        self.model_type = model_type
+        self.sentence_length = sentence_length
+
+
 class Trainer:
     """
     Responsible for training models offline.
@@ -45,21 +55,43 @@ class Trainer:
         self.sequence_model.save(self.save_file_name)
 
 
+def train_from_parameters(params):
+    """
+    Trains based on params for 500 epochs in total.
+
+    :type params: TrainParameters
+    """
+    conversation_file = params.conversation_file
+    lines = ConversationLoader.load_conversation_file(conversation_file, reverse=False)
+    model_file_name = params.model_file_name
+    w2v = Word2Vec()
+    sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=params.sentence_length)
+    if SequenceModel.isfile(model_file_name):
+        model = SequenceModel.load(model_file_name)
+    else:
+        model = SequenceModel(Constants.Word2VecConstant, input_length=params.sentence_length,
+                              model_type=ModelType.SeqLayer2Dim1k)
+    trainer = Trainer(model_file_name=model_file_name, sequence_processor=sp, sequence_model=model)
+    tp = TextPredictor(model=trainer.sequence_model, sequence_processor=sp)
+    for i in range(500 / params.epochs):
+        trainer.train_on_conversation(conversation=lines, epochs=params.epochs)
+        queries = params.queries
+        try:
+            for query in queries:
+                print('You:', query)
+                reply = tp.get_reply_for_single_query(query)
+                print('Bot:', reply)
+        except Exception:
+            print('Got some exception')
+
+
 def train_dummy():
     conversation_file = '../data/dummy_convo.txt'
     model_file_name = '../models/dummy_model'
-    w2v = Word2Vec()
-    sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=10)
-    model = SequenceModel(Constants.Word2VecConstant, input_length=10, model_type=ModelType.Sequence)
-    trainer = Trainer(model_file_name=model_file_name, sequence_processor=sp, sequence_model=model)
-    tp = TextPredictor(model=trainer.sequence_model, sequence_processor=sp)
-    for i in range(10):
-        trainer.train_on_conversation_file(conversation_file, epochs=100)
-        queries = ['who are you', 'what do you do', 'what can you teach']
-        for query in queries:
-            print('You:', query)
-            reply = tp.get_reply_for_single_query(query)
-            print('Bot:', reply)
+    params = TrainParameters(conversation_file=conversation_file, model_file_name=model_file_name,
+                             queries=['who are you', 'what do you do', 'what can you teach'],
+                             epochs=100, model_type=ModelType.Sequence, sentence_length=10)
+    train_from_parameters(params)
 
 
 def train_movie():
@@ -68,7 +100,7 @@ def train_movie():
     model_file_name = '../models/movie_lines_10k_lstm1k_2layer'
     w2v = Word2Vec()
     sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=40)
-    if os.path.isfile(model_file_name):
+    if SequenceModel.isfile(model_file_name):
         model = SequenceModel.load(model_file_name)
     else:
         model = SequenceModel(Constants.Word2VecConstant, input_length=40, model_type=ModelType.SeqLayer2Dim1k)
@@ -109,5 +141,16 @@ def train_english_stack():
             print('Got some exception')
 
 
+def train_simple_create():
+    conversation_file = '../data/simple_created.txt'
+    queries = ['who are you', 'what is the capital of japan',
+               'do you want milk']
+    model_file_name = '../models/simple_created_100'
+    sentence_length = 20
+    params = TrainParameters(conversation_file=conversation_file, model_file_name=model_file_name, queries=queries,
+                             epochs=10, model_type=ModelType.Sequence100Hidden, sentence_length=sentence_length)
+    train_from_parameters(params)
+
+
 if __name__ == '__main__':
-    train_english_stack()
+    train_simple_create()

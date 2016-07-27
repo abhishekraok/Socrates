@@ -1,11 +1,9 @@
 from keras.layers import LSTM, Dense, Activation
 from keras.models import Sequential
 from keras.optimizers import RMSprop
+from seq2seq.models import SimpleSeq2seq
 
 from EnumsCollection import ModelType
-from Constants import Constants
-import seq2seq
-from seq2seq.models import SimpleSeq2seq
 
 
 class ModelFactory(object):
