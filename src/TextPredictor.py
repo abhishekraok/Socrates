@@ -31,7 +31,7 @@ class TextPredictor:
 
 
 if __name__ == '__main__':
-    sequence_model = SequenceModel.load('../models/dummy_model')
+    sequence_model = SequenceModel.load('../models/simple_created_200')
     sp = SequenceProcessor(Word2Vec(), words_in_sentence=20)
     tp = TextPredictor(model=sequence_model, sequence_processor=sp)
     for i in range(3):

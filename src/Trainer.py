@@ -73,7 +73,7 @@ def train_from_parameters(params):
                               model_type=params.model_type)
     trainer = Trainer(model_file_name=model_file_name, sequence_processor=sp, sequence_model=model)
     tp = TextPredictor(model=trainer.sequence_model, sequence_processor=sp)
-    total_iterations = 500 / params.epochs
+    total_iterations = 5000 / params.epochs
     for i in range(total_iterations):
         print('Iteration number ', i, '/', total_iterations)
         trainer.train_on_conversation(conversation=lines, epochs=params.epochs)
@@ -147,10 +147,10 @@ def train_child_talk():
     conversation_file = '../data/child_talk.txt'
     queries = ['who are you', 'what is the capital of japan',
                'do you want milk']
-    model_file_name = '../models/simple_created_200'
+    model_file_name = '../models/simple_created_1k'
     sentence_length = 10
     params = TrainParameters(conversation_file=conversation_file, model_file_name=model_file_name, queries=queries,
-                             epochs=100, model_type=ModelType.Sequence200Hidden, sentence_length=sentence_length)
+                             epochs=100, model_type=ModelType.Sequence1k, sentence_length=sentence_length)
     train_from_parameters(params)
 
 
@@ -164,5 +164,15 @@ def train_rowling():
     train_from_parameters(params)
 
 
+def train_negative():
+    conversation_file = '../data/negative.txt'
+    queries = ['hi', 'what do you do', 'what do you teach']
+    model_file_name = '../models/negative_100'
+    sentence_length = 10
+    params = TrainParameters(conversation_file=conversation_file, model_file_name=model_file_name, queries=queries,
+                             epochs=100, model_type=ModelType.Sequence100Hidden, sentence_length=sentence_length)
+    train_from_parameters(params)
+
+
 if __name__ == '__main__':
-    train_child_talk()
+    train_negative()
