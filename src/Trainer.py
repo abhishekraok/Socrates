@@ -2,12 +2,11 @@ from __future__ import print_function
 
 from Constants import Constants
 from ConversationLoader import ConversationLoader
+from ModelFactory import ModelType
 from SequenceModel import SequenceModel
 from SequenceProcessor import SequenceProcessor
 from TextPredictor import TextPredictor
 from Word2Vec import Word2Vec
-from ModelFactory import ModelType
-import os
 
 
 class TrainParameters:
@@ -175,4 +174,4 @@ def train_negative():
 
 
 if __name__ == '__main__':
-    train_negative()
+    train_dummy()

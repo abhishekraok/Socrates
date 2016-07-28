@@ -31,10 +31,13 @@ class TextPredictor:
 
 
 if __name__ == '__main__':
-    sequence_model = SequenceModel.load('../models/simple_created_200')
-    sp = SequenceProcessor(Word2Vec(), words_in_sentence=20)
+    sequence_model = SequenceModel.load('../models/negative_100')
+    sp = SequenceProcessor(Word2Vec(), words_in_sentence=10)
     tp = TextPredictor(model=sequence_model, sequence_processor=sp)
-    for i in range(3):
+    for i in range(10000):
         input_query = raw_input('User:')
+        if input_query in ['quit', 'exit', 'bye']:
+            print('Bot: Good bye')
+            break
         reply = tp.get_reply_for_single_query(input_query)
         print('Bot:', reply)
