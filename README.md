@@ -7,7 +7,7 @@ The following libraries are required
 
 1. Theano
 2. Keras
-3. Seq2Seq
+3. [Seq2Seq](https://github.com/farizrahman4u/seq2seq)
 4. GenSim
 
 ## Data 
