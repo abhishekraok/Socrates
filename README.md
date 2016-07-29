@@ -10,6 +10,8 @@ The following libraries are required
 3. [Seq2Seq](https://github.com/farizrahman4u/seq2seq)
 4. GenSim
 
+Check the requirements.txt for full list
+
 ## Data 
 Please place conversation files in data folder. The expected format of conversation file is each conversation is a text file, and in that file each conversation is a separate line. See the sample conversation file in [/data/dummy_convo.txt]( https://github.com/abhishekraok/Socrates/blob/master/data/dummy_convo.txt)
 
@@ -20,7 +22,7 @@ Words are converted into vectors using word2vec. Each line is converted to a mat
 The model tries to predict next line from the current line. 
 
 ## Getting Started
-Edit and run [/src/Trainer.py](https://github.com/abhishekraok/Socrates/blob/master/src/Trainer.py) to start training the model.
+Edit and run [/socrates/Trainer.py](https://github.com/abhishekraok/Socrates/blob/master/socrates/Trainer.py) to start training the model.
 
 ## Unit tests
-All the unit tests are in the file [/src/Tests.py](https://github.com/abhishekraok/Socrates/blob/master/src/Tests.py)
+All the unit tests are in the file [/socrates/Tests.py](https://github.com/abhishekraok/Socrates/blob/master/socrates/Tests.py)
