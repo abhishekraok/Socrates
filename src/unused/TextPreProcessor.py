@@ -1,8 +1,10 @@
 from __future__ import print_function
+
 import nltk
 import numpy as np
-from WordMap import WordMap
-from Constants import Constants
+
+from src.Constants import Constants
+from src.unused.WordMap import WordMap
 
 
 class TextPreProcessor:

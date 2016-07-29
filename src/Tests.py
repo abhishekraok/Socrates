@@ -5,14 +5,15 @@ from keras.layers import Dense, Activation
 from keras.models import Sequential
 from numpy import linalg as LA
 from sklearn.metrics import f1_score
+import os
 
-from EnumsCollection import ModelType
-from TPModel import TpModel
-from TextPreProcessor import TextPreProcessor
-from WordMap import WordMap
-from Word2Vec import Word2Vec
-from SequenceProcessor import SequenceProcessor
 from Constants import Constants
+from EnumsCollection import ModelType
+from SequenceProcessor import SequenceProcessor
+from Word2Vec import Word2Vec
+from src.unused.TPModel import TpModel
+from src.unused.TextPreProcessor import TextPreProcessor
+from src.unused.WordMap import WordMap
 
 
 class TestTPModel(TestCase):
@@ -39,6 +40,7 @@ class TestTextPreprocessor(TestCase):
         vector, y = tp.text_to_vector('here are are hi woohoo', 1)
         decoded_message = tp.vector_to_words(vector)
         self.assertEqual(decoded_message, ['here', 'are', 'are', 'hi'])
+        os.remove('test.tsv')
 
     def test_text_encod_decode(self):
         word_list = ['there', 'here', 'are', 'you', 'hi']
@@ -50,6 +52,7 @@ class TestTextPreprocessor(TestCase):
         vector, y = tp.text_to_vector(test_message, 1)
         decoded_message = tp.vector_to_text(vector)
         self.assertEqual(decoded_message, 'here are are hi')
+        os.remove('test.tsv')
 
     def test_one_hot(self):
         numbers = [3, 1, 2, 0]

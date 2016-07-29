@@ -1,8 +1,9 @@
 from __future__ import print_function
+
 from src.EnumsCollection import Actions
-from src.ChatHistory import ChatHistoryKeeper
 from src.TextPredictor import TextPredictor, DummyTextPredictor
-from src.Understander import Understander
+from src.unused.ChatHistory import ChatHistoryKeeper
+from src.unused.Understander import Understander
 
 
 class ChatEngine():

@@ -1,12 +1,13 @@
 from __future__ import print_function
 
+import os
+
 from keras.models import model_from_json
 
-import TextPreProcessor
-from Constants import Constants
-from ModelFactory import ModelFactory
-import os
-from EnumsCollection import ModelType
+from src.Constants import Constants
+from src.EnumsCollection import ModelType
+from src.ModelFactory import ModelFactory
+from src.unused import TextPreProcessor
 
 
 class TpModel():
