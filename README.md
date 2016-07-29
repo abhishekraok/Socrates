@@ -17,6 +17,7 @@ Please place conversation files in data folder. The expected format of conversat
 
 ## Install
 `sudo pip install git+https://github.com/farizrahman4u/seq2seq.git`
+
 `sudo pip install git+https://github.com/abhishekraok/Socrates.git`
 
 ## Model
