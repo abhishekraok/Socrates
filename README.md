@@ -21,8 +21,5 @@ Words are converted into vectors using word2vec. Each line is converted to a mat
 ## Learning
 The model tries to predict next line from the current line. 
 
-## Getting Started
-Edit and run [/socrates/Trainer.py](https://github.com/abhishekraok/Socrates/blob/master/socrates/Trainer.py) to start training the model.
-
 ## Unit tests
 All the unit tests are in the file [/socrates/Tests.py](https://github.com/abhishekraok/Socrates/blob/master/socrates/Tests.py)
