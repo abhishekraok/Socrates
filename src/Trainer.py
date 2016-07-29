@@ -53,37 +53,42 @@ class Trainer:
         self.sequence_model.train(x=x, y=y, epoch=epochs)
         self.sequence_model.save(self.save_file_name)
 
+    @staticmethod
+    def get_trainer_and_predictor(params):
+        """
+        :type params: TrainParameters
+        """
+        model_file_name = params.model_file_name
+        w2v = Word2Vec()
+        sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=params.sentence_length)
+        if SequenceModel.isfile(model_file_name):
+            model = SequenceModel.load(model_file_name)
+        else:
+            model = SequenceModel(Constants.Word2VecConstant, input_length=params.sentence_length,
+                                  model_type=params.model_type)
+        trainer = Trainer(model_file_name=model_file_name, sequence_processor=sp, sequence_model=model)
+        tp = TextPredictor(model=trainer.sequence_model, sequence_processor=sp)
+        return trainer, tp
+
+    def train(self, conversation, params, text_predictor, total_iterations):
+        for i in range(total_iterations):
+            print('Iteration number ', i, '/', total_iterations)
+            self.train_on_conversation(conversation=conversation, epochs=params.epochs)
+            queries = params.queries
+            try:
+                for query in queries:
+                    print('You:', query)
+                    reply = text_predictor.get_reply_for_single_query(query)
+                    print('Bot:', reply)
+            except StandardError:
+                print('Got some exception')
+
 
 def train_from_parameters(params):
-    """
-    Trains based on params for 500 epochs in total.
-
-    :type params: TrainParameters
-    """
     conversation_file = params.conversation_file
-    lines = ConversationLoader.load_conversation_file(conversation_file, reverse=False)
-    model_file_name = params.model_file_name
-    w2v = Word2Vec()
-    sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=params.sentence_length)
-    if SequenceModel.isfile(model_file_name):
-        model = SequenceModel.load(model_file_name)
-    else:
-        model = SequenceModel(Constants.Word2VecConstant, input_length=params.sentence_length,
-                              model_type=params.model_type)
-    trainer = Trainer(model_file_name=model_file_name, sequence_processor=sp, sequence_model=model)
-    tp = TextPredictor(model=trainer.sequence_model, sequence_processor=sp)
-    total_iterations = 5000 / params.epochs
-    for i in range(total_iterations):
-        print('Iteration number ', i, '/', total_iterations)
-        trainer.train_on_conversation(conversation=lines, epochs=params.epochs)
-        queries = params.queries
-        try:
-            for query in queries:
-                print('You:', query)
-                reply = tp.get_reply_for_single_query(query)
-                print('Bot:', reply)
-        except Exception:
-            print('Got some exception')
+    conversation = ConversationLoader.load_conversation_file(conversation_file, reverse=False)
+    trainer, text_predictor = Trainer.get_trainer_and_predictor(params)
+    trainer.train(conversation=conversation, params=params, text_predictor=text_predictor)
 
 
 def train_dummy():
