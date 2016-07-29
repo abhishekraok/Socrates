@@ -45,10 +45,7 @@ class TextPredictor:
 
 
 if __name__ == '__main__':
-    pre_trained_model = '../model/dummy_model'
-    h5_url = "https://1drv.ms/u/s!AizkA_PooBXSkuU1CF09S6EIbW1NGw"
-    json_url = "https://1drv.ms/u/s!AizkA_PooBXSkuU0GI_Es3YU6pjRAA"
-    SequenceModel.download_from_cloud(pre_trained_model, json_url, h5_url)
+    pre_trained_model = '../models/dummy_model'
     tp = TextPredictor.load(pre_trained_model)
     for i in range(10000):
         input_query = input('User:')
