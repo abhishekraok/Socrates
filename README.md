@@ -23,4 +23,4 @@ The model tries to predict next line from the current line.
 Edit and run [/src/Trainer.py](https://github.com/abhishekraok/Socrates/blob/master/src/Trainer.py) to start training the model.
 
 ## Unit tests
-All the unit tests are in the file [/src/test_basic.py](https://github.com/abhishekraok/Socrates/blob/master/src/test_basic.py)
+All the unit tests are in the file [/src/Tests.py](https://github.com/abhishekraok/Socrates/blob/master/src/Tests.py)
