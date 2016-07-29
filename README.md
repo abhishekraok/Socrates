@@ -16,6 +16,7 @@ Check the requirements.txt for full list
 Please place conversation files in data folder. The expected format of conversation file is each conversation is a text file, and in that file each conversation is a separate line. See the sample conversation file in [/data/dummy_convo.txt]( https://github.com/abhishekraok/Socrates/blob/master/data/dummy_convo.txt)
 
 ## Install
+`sudo pip install git+https://github.com/farizrahman4u/seq2seq.git`
 `sudo pip install git+https://github.com/abhishekraok/Socrates.git`
 
 ## Model
