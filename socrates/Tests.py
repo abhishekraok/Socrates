@@ -11,9 +11,9 @@ from Constants import Constants
 from EnumsCollection import ModelType
 from SequenceProcessor import SequenceProcessor
 from Word2Vec import Word2Vec
-from src.unused.TPModel import TpModel
-from src.unused.TextPreProcessor import TextPreProcessor
-from src.unused.WordMap import WordMap
+from socrates.unused.TPModel import TpModel
+from socrates.unused.TextPreProcessor import TextPreProcessor
+from socrates.unused.WordMap import WordMap
 
 
 class TestTPModel(TestCase):

@@ -1,4 +1,4 @@
-from src.EnumsCollection import Actions
+from socrates.EnumsCollection import Actions
 
 
 class Understander:

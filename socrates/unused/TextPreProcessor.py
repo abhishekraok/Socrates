@@ -3,8 +3,8 @@ from __future__ import print_function
 import nltk
 import numpy as np
 
-from src.Constants import Constants
-from src.unused.WordMap import WordMap
+from socrates.Constants import Constants
+from socrates.unused.WordMap import WordMap
 
 
 class TextPreProcessor:

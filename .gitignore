@@ -96,7 +96,7 @@ data/
 
 # pycharm stuff
 .idea/
-src/scratch/
+socrates/scratch/
 
 # custom dictionary files
 *.tsv

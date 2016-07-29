@@ -4,10 +4,10 @@ import os
 
 from keras.models import model_from_json
 
-from src.Constants import Constants
-from src.EnumsCollection import ModelType
-from src.ModelFactory import ModelFactory
-from src.unused import TextPreProcessor
+from socrates.Constants import Constants
+from socrates.EnumsCollection import ModelType
+from socrates.ModelFactory import ModelFactory
+from socrates.unused import TextPreProcessor
 
 
 class TpModel():

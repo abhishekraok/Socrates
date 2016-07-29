@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-from src.unused.ChatEngine import ChatEngine
+from socrates.unused.ChatEngine import ChatEngine
 
 
 class ChatBot:
