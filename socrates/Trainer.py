@@ -7,16 +7,8 @@ from SequenceModel import SequenceModel
 from SequenceProcessor import SequenceProcessor
 from TextPredictor import TextPredictor
 from Word2Vec import Word2Vec
-
-
-class TrainParameters:
-    def __init__(self, model_file_name, queries, epochs, conversation_file, model_type, sentence_length):
-        self.model_file_name = model_file_name
-        self.queries = queries
-        self.epochs = epochs
-        self.conversation_file = conversation_file
-        self.model_type = model_type
-        self.sentence_length = sentence_length
+from socrates.Parameters import TrainParameters
+from Parameters import SimpleTrainParameters
 
 
 class Trainer:
@@ -56,7 +48,7 @@ class Trainer:
     @staticmethod
     def get_trainer_and_predictor(params):
         """
-        :type params: TrainParameters
+        :type params: socrates.Parameters.TrainParameters
         """
         model_file_name = params.model_file_name
         w2v = Word2Vec()
@@ -67,7 +59,7 @@ class Trainer:
             model = SequenceModel(Constants.Word2VecConstant, input_length=params.sentence_length,
                                   model_type=params.model_type)
         trainer = Trainer(model_file_name=model_file_name, sequence_processor=sp, sequence_model=model)
-        tp = TextPredictor(model=trainer.sequence_model, sequence_processor=sp)
+        tp = TextPredictor(sequence_model=trainer.sequence_model, sequence_processor=sp)
         return trainer, tp
 
     def train(self, conversation, params, text_predictor, total_iterations):
@@ -82,6 +74,15 @@ class Trainer:
                     print('Bot:', reply)
             except StandardError:
                 print('Got some exception')
+
+    def train_from_simple_parameters(self, simple_train_params):
+        """
+
+        :type simple_train_params: SimpleTrainParameters
+        """
+        conversation_file = simple_train_params.conversation_file
+        conversation = ConversationLoader.load_conversation_file(conversation_file, reverse=False)
+        self.train(conversation=conversation, params=params, text_predictor=text_predictor)
 
 
 def train_from_parameters(params):
@@ -111,7 +112,7 @@ def train_movie():
     else:
         model = SequenceModel(Constants.Word2VecConstant, input_length=40, model_type=ModelType.SeqLayer2Dim1k)
     trainer = Trainer(model_file_name=model_file_name, sequence_processor=sp, sequence_model=model)
-    tp = TextPredictor(model=trainer.sequence_model, sequence_processor=sp)
+    tp = TextPredictor(sequence_model=trainer.sequence_model, sequence_processor=sp)
     for i in range(500):
         trainer.train_on_conversation(conversation=lines, epochs=1)
         queries = ['who are you', 'how are you', 'what do you want']
@@ -133,7 +134,7 @@ def train_english_stack():
         print('Did not find a previous model file')
         model = SequenceModel(Constants.Word2VecConstant, input_length=40, model_type=ModelType.Sequence1k)
     trainer = Trainer(model_file_name=model_file_name, sequence_processor=sp, sequence_model=model)
-    tp = TextPredictor(model=trainer.sequence_model, sequence_processor=sp)
+    tp = TextPredictor(sequence_model=trainer.sequence_model, sequence_processor=sp)
     for i in range(500):
         trainer.train_on_conversation(conversation=lines, epochs=1)
         queries = ['when is it okay to end a sentence in a preposition', 'what is the correct plural of octopus',

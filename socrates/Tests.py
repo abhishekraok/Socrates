@@ -131,15 +131,15 @@ class TestKeras(TestCase):
 
 
 class TestWord2Vec(TestCase):
-    model = Word2Vec()
+    word2vec = Word2Vec()
 
     def test_word_vec(self):
         word = "Congratulations"
-        derived_word = TestWord2Vec.model.get_top_word(TestWord2Vec.model.get_vector(word))
+        derived_word = TestWord2Vec.word2vec.get_top_word(TestWord2Vec.word2vec.get_vector(word))
         self.assertEqual(word, derived_word)
 
     def test_line_to_matrix(self):
-        w2v = TestWord2Vec.model
+        w2v = TestWord2Vec.word2vec
         line = 'hello how are you'
         words_in_sentence = 10
         sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=words_in_sentence)
@@ -149,3 +149,8 @@ class TestWord2Vec(TestCase):
         self.assertEqual(matrix.shape[1], Constants.Word2VecConstant)
         decoded_line = sp.matrix_to_line(matrix)
         self.assertEqual(line, decoded_line.strip())
+
+
+class TestSocrates:
+    def test_create(self):
+        chatbot = Socrates.create()

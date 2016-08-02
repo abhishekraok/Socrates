@@ -9,14 +9,14 @@ from builtins import input
 
 
 class TextPredictor:
-    def __init__(self, model, sequence_processor):
+    def __init__(self, sequence_model, sequence_processor):
         """
         Basic prediction class. Gives next conversation from past conversation.
 
-        :type model: SequenceModel
+        :type sequence_model: SequenceModel
         :type sequence_processor: SequenceProcessor
         """
-        self.sequence_model = model
+        self.sequence_model = sequence_model
         self.sequence_processor = sequence_processor
 
     def get_reply_for_single_query(self, user_text):
@@ -40,7 +40,7 @@ class TextPredictor:
             raise Exception('Repeat layer not in layer number 2. Please specify words in sentence in code')
         words_in_sentence = repeat_layer['config']['n']
         sequence_processor = SequenceProcessor(Word2Vec(), words_in_sentence=words_in_sentence)
-        text_predictor = TextPredictor(model=sequence_model_loaded, sequence_processor=sequence_processor)
+        text_predictor = TextPredictor(sequence_model=sequence_model_loaded, sequence_processor=sequence_processor)
         return text_predictor
 
 
