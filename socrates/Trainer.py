@@ -62,11 +62,11 @@ class Trainer:
         tp = TextPredictor(sequence_model=trainer.sequence_model, sequence_processor=sp)
         return trainer, tp
 
-    def train(self, conversation, params, text_predictor, total_iterations):
+    def train(self, conversation, epochs, queries, text_predictor, total_iterations):
         for i in range(total_iterations):
             print('Iteration number ', i, '/', total_iterations)
-            self.train_on_conversation(conversation=conversation, epochs=params.epochs)
-            queries = params.queries
+            self.train_on_conversation(conversation=conversation, epochs=epochs)
+            queries = queries
             try:
                 for query in queries:
                     print('You:', query)
@@ -75,21 +75,13 @@ class Trainer:
             except StandardError:
                 print('Got some exception')
 
-    def train_from_simple_parameters(self, simple_train_params):
-        """
 
-        :type simple_train_params: SimpleTrainParameters
-        """
-        conversation_file = simple_train_params.conversation_file
-        conversation = ConversationLoader.load_conversation_file(conversation_file, reverse=False)
-        self.train(conversation=conversation, params=params, text_predictor=text_predictor)
-
-
-def train_from_parameters(params):
+def train_from_parameters(params, total_iterations):
     conversation_file = params.conversation_file
     conversation = ConversationLoader.load_conversation_file(conversation_file, reverse=False)
     trainer, text_predictor = Trainer.get_trainer_and_predictor(params)
-    trainer.train(conversation=conversation, params=params, text_predictor=text_predictor)
+    trainer.train(conversation=conversation, epochs=params.epochs, text_predictor=text_predictor,
+                  queries=params.queries, total_iterations=total_iterations)
 
 
 def train_dummy():
@@ -97,7 +89,7 @@ def train_dummy():
     model_file_name = '../models/dummy_model'
     params = TrainParameters(conversation_file=conversation_file, model_file_name=model_file_name,
                              queries=['who are you', 'what do you do', 'what can you teach'],
-                             epochs=100, model_type=ModelType.Sequence10Hidden, sentence_length=10)
+                             epochs=100, model_type=ModelType.seq2seq_1layer_10hidden_nodes, sentence_length=10)
     train_from_parameters(params)
 
 
@@ -110,7 +102,7 @@ def train_movie():
     if SequenceModel.isfile(model_file_name):
         model = SequenceModel.load(model_file_name)
     else:
-        model = SequenceModel(Constants.Word2VecConstant, input_length=40, model_type=ModelType.SeqLayer2Dim1k)
+        model = SequenceModel(Constants.Word2VecConstant, input_length=40, model_type=ModelType.seq2seq_2layer_1000hidden_nodes)
     trainer = Trainer(model_file_name=model_file_name, sequence_processor=sp, sequence_model=model)
     tp = TextPredictor(sequence_model=trainer.sequence_model, sequence_processor=sp)
     for i in range(500):
@@ -132,7 +124,7 @@ def train_english_stack():
         model = SequenceModel.load(model_file_name)
     else:
         print('Did not find a previous model file')
-        model = SequenceModel(Constants.Word2VecConstant, input_length=40, model_type=ModelType.Sequence1k)
+        model = SequenceModel(Constants.Word2VecConstant, input_length=40, model_type=ModelType.seq2seq_1layer_1000hidden_nodes)
     trainer = Trainer(model_file_name=model_file_name, sequence_processor=sp, sequence_model=model)
     tp = TextPredictor(sequence_model=trainer.sequence_model, sequence_processor=sp)
     for i in range(500):
@@ -155,7 +147,7 @@ def train_child_talk():
     model_file_name = '../models/simple_created_1k'
     sentence_length = 10
     params = TrainParameters(conversation_file=conversation_file, model_file_name=model_file_name, queries=queries,
-                             epochs=100, model_type=ModelType.Sequence1k, sentence_length=sentence_length)
+                             epochs=100, model_type=ModelType.seq2seq_1layer_1000hidden_nodes, sentence_length=sentence_length)
     train_from_parameters(params)
 
 
@@ -165,7 +157,7 @@ def train_rowling():
     model_file_name = '../models/jkrowl_200'
     sentence_length = 40
     params = TrainParameters(conversation_file=conversation_file, model_file_name=model_file_name, queries=queries,
-                             epochs=10, model_type=ModelType.Sequence200Hidden, sentence_length=sentence_length)
+                             epochs=10, model_type=ModelType.seq2seq_1layer_2000hidden_nodes, sentence_length=sentence_length)
     train_from_parameters(params)
 
 
@@ -175,7 +167,7 @@ def train_negative():
     model_file_name = '../models/negative_100'
     sentence_length = 10
     params = TrainParameters(conversation_file=conversation_file, model_file_name=model_file_name, queries=queries,
-                             epochs=100, model_type=ModelType.Sequence100Hidden, sentence_length=sentence_length)
+                             epochs=100, model_type=ModelType.seq2seq_1layer_100hidden_nodes, sentence_length=sentence_length)
     train_from_parameters(params)
 
 

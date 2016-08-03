@@ -18,19 +18,19 @@ class ModelFactory(object):
             return ModelFactory.get_first_lstm_model(input_shape, nb_classes=nb_classes)
         if model_type.value == ModelType.SimplestModel.value:
             return ModelFactory.get_simplest_model()
-        if model_type.value == ModelType.Sequence10Hidden.value:
+        if model_type.value == ModelType.seq2seq_1layer_10hidden_nodes.value:
             return ModelFactory.get_single_layer_LSTM(input_shape=input_shape, nb_classes=nb_classes,
                                                       output_length=output_length, hidden_units=10)
-        if model_type.value == ModelType.Sequence100Hidden.value:
+        if model_type.value == ModelType.seq2seq_1layer_100hidden_nodes.value:
             return ModelFactory.get_single_layer_LSTM(input_shape=input_shape, nb_classes=nb_classes,
                                                       output_length=output_length, hidden_units=100)
-        if model_type.value == ModelType.Sequence200Hidden.value:
+        if model_type.value == ModelType.seq2seq_1layer_2000hidden_nodes.value:
             return ModelFactory.get_single_layer_LSTM(input_shape=input_shape, nb_classes=nb_classes,
                                                       output_length=output_length, hidden_units=200)
-        if model_type.value == ModelType.Sequence1k.value:
+        if model_type.value == ModelType.seq2seq_1layer_1000hidden_nodes.value:
             return ModelFactory.get_single_layer_LSTM(input_shape=input_shape, nb_classes=nb_classes,
                                                       output_length=output_length, hidden_units=1000)
-        if model_type.value == ModelType.SeqLayer2Dim1k.value:
+        if model_type.value == ModelType.seq2seq_2layer_1000hidden_nodes.value:
             return ModelFactory.get_2layer_1k_model(input_shape=input_shape, nb_classes=nb_classes,
                                                     output_length=output_length)
         raise Exception("Model type not understood " + str(model_type))

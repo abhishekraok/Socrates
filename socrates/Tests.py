@@ -14,6 +14,11 @@ from Word2Vec import Word2Vec
 from socrates.unused.TPModel import TpModel
 from socrates.unused.TextPreProcessor import TextPreProcessor
 from socrates.unused.WordMap import WordMap
+from socrates.Socrates import  Socrates
+from socrates.Parameters import SimpleTrainParameters, TrainParameters
+
+# declared this as global as it takes long time to initialize this
+word2vec = Word2Vec(path='../data/GoogleNews-vectors-negative300.bin')
 
 
 class TestTPModel(TestCase):
@@ -131,18 +136,15 @@ class TestKeras(TestCase):
 
 
 class TestWord2Vec(TestCase):
-    word2vec = Word2Vec()
-
     def test_word_vec(self):
         word = "Congratulations"
-        derived_word = TestWord2Vec.word2vec.get_top_word(TestWord2Vec.word2vec.get_vector(word))
+        derived_word = word2vec.get_top_word(word2vec.get_vector(word))
         self.assertEqual(word, derived_word)
 
     def test_line_to_matrix(self):
-        w2v = TestWord2Vec.word2vec
         line = 'hello how are you'
         words_in_sentence = 10
-        sp = SequenceProcessor(word2Vec=w2v, words_in_sentence=words_in_sentence)
+        sp = SequenceProcessor(word2Vec=word2vec, words_in_sentence=words_in_sentence)
         matrix = sp.line_to_matrix(line)
         self.assertEqual(len(matrix.shape), 2)
         self.assertEqual(matrix.shape[0], words_in_sentence)
@@ -151,6 +153,23 @@ class TestWord2Vec(TestCase):
         self.assertEqual(line, decoded_line.strip())
 
 
-class TestSocrates:
+class TestSocrates(TestCase):
     def test_create(self):
-        chatbot = Socrates.create()
+        pre_trained_word2vec_file = 'GoogleNews-vectors-negative300.bin'
+        word2vec_dimension = 300
+        model_file_name = 'created_model'
+        words_in_sentence = 20
+        model_type = ModelType.seq2seq_1layer_10hidden_nodes
+        conversation_file = '../data/dummy_convo.txt'
+
+        # initializations
+        socrates = Socrates.create(pre_trained_word2vec_file=pre_trained_word2vec_file, words_in_sentence=words_in_sentence,
+                                   word2vec_dimension=word2vec_dimension, model_type=model_type,
+                                   model_file_name=model_file_name)
+
+        # train
+        train_params = SimpleTrainParameters(queries=['who are you', 'what do you do'], epochs=10,
+                                             conversation_file=conversation_file,
+                                             sentence_length=words_in_sentence, total_iterations=100)
+        socrates.train_using_params(train_params)
+        self.assertIsNotNone(socrates)

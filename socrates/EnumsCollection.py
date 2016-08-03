@@ -9,8 +9,8 @@ class Actions(Enum):
 class ModelType(Enum):
     FirstLSTMModel = 0
     SimplestModel = 1
-    Sequence10Hidden = 2
-    Sequence100Hidden = 3
-    Sequence1k = 4
-    SeqLayer2Dim1k = 5
-    Sequence200Hidden = 6
+    seq2seq_1layer_10hidden_nodes = 2
+    seq2seq_1layer_100hidden_nodes = 3
+    seq2seq_1layer_1000hidden_nodes = 4
+    seq2seq_2layer_1000hidden_nodes = 5
+    seq2seq_1layer_2000hidden_nodes = 6

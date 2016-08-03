@@ -9,7 +9,8 @@ class TrainParameters:
 
 
 class SimpleTrainParameters:
-    def __init__(self, queries, epochs, conversation_file, sentence_length):
+    def __init__(self, queries, epochs, conversation_file, sentence_length, total_iterations):
+        self.total_iterations = total_iterations
         self.queries = queries
         self.epochs = epochs
         self.conversation_file = conversation_file

@@ -1,5 +1,6 @@
 from EnumsCollection import ModelType
-from socrates.Parameters import TrainParameters
+from socrates.ConversationLoader import ConversationLoader
+from socrates.Parameters import TrainParameters, SimpleTrainParameters
 from socrates.SequenceModel import SequenceModel
 from socrates.SequenceProcessor import SequenceProcessor
 from socrates.TextPredictor import TextPredictor
@@ -19,6 +20,7 @@ class Socrates:
 
     @staticmethod
     def create(pre_trained_word2vec_file, words_in_sentence, word2vec_dimension, model_type, model_file_name):
+        # type: (str, int, int, ModelType, str) -> Socrates
         word2vec = Word2Vec(path=pre_trained_word2vec_file)
         sequence_processor = SequenceProcessor(word2Vec=word2vec, words_in_sentence=words_in_sentence)
         sequence_model = SequenceModel(vector_dimension=word2vec_dimension, input_length=words_in_sentence,
@@ -55,8 +57,18 @@ class Socrates:
         return self.text_predictor.get_reply_for_single_query(user_text)
 
     def train(self, conversation, params, total_iterations):
-        return self.trainer.train(conversation=conversation, params=params, text_predictor=self.text_predictor,
-                                  total_iterations=total_iterations)
+        return self.trainer.train(conversation=conversation, epochs=params.epochs, text_predictor=self.text_predictor,
+                                  total_iterations=total_iterations, queries=params.queries)
+
+    def train_using_params(self, simple_train_params):
+        """
+
+        :type simple_train_params: SimpleTrainParameters
+        """
+        conversation = ConversationLoader.load_conversation_file(simple_train_params.conversation_file, reverse=False)
+        return self.trainer.train(conversation=conversation, epochs=simple_train_params.epochs,
+                                  text_predictor=self.text_predictor,
+                                  total_iterations=simple_train_params.total_iterations, queries=simple_train_params.queries)
 
     def save(self, file_name):
         self.text_predictor.sequence_model.save(file_name=file_name)
@@ -65,7 +77,7 @@ class Socrates:
 if __name__ == '__main__':
     train_params = TrainParameters(conversation_file='../data/dummy_convo.txt', model_file_name='../models/dummy_model',
                                    queries=['who are you', 'what do you do', 'what can you teach'],
-                                   epochs=100, model_type=ModelType.Sequence10Hidden, sentence_length=10)
+                                   epochs=100, model_type=ModelType.seq2seq_1layer_10hidden_nodes, sentence_length=10)
     socrates = Socrates.create_from_params(train_params)
     with open(train_params.conversation_file, 'r') as f:
         conversation_from_file = f.read()
