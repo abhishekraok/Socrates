@@ -35,9 +35,7 @@ class TextPredictor:
     def load(model_file):
         sequence_model_loaded = SequenceModel.load(model_file)
         config = sequence_model_loaded.model.get_config()
-        repeat_layer = config[2]
-        if repeat_layer['class_name'] is not 'RepeatVector':
-            raise Exception('Repeat layer not in layer number 2. Please specify words in sentence in code')
+        repeat_layer = [j for i,j in enumerate(config) if j['class_name'] is 'RepeatVector'][0]
         words_in_sentence = repeat_layer['config']['n']
         sequence_processor = SequenceProcessor(Word2Vec(), words_in_sentence=words_in_sentence)
         text_predictor = TextPredictor(sequence_model=sequence_model_loaded, sequence_processor=sequence_processor)
